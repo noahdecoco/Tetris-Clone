@@ -1,11 +1,12 @@
 var GAME_CORE = (function(){
 
+	var _debugMode = false;
 	var _this = {};
 	var _modules = {};
 	var _events = {};
 
 	var _debug = function(msg, weight) {
-		console.log(msg);
+		if(_debugMode) console.log(msg);
 	};
 
 	// MODULES

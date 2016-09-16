@@ -32,7 +32,8 @@ GAME_CORE.registerModule("game-controller", function(sb){
 	};
 
 	var _destroy = function(){
-		
+		window.removeEventListener("keydown", _keyDownListener);
+		window.removeEventListener("keyup", _keyUpListener);
 	};
 
 	return {

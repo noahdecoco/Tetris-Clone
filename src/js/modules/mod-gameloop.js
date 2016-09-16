@@ -1,5 +1,6 @@
 GAME_CORE.registerModule("game-loop", function(sb){
 
+	var _animID;
 	var _lastRenderTime, _lastUpdateTime, _delta, _currentTime;
 	var _fps = 1000/30;
 	var _ups = 1000/30;
@@ -26,16 +27,18 @@ GAME_CORE.registerModule("game-loop", function(sb){
 			_render();
 			_lastRenderTime = _currTime;
 		}
-		window.requestAnimationFrame(_loop);
+
+		_animID = window.requestAnimationFrame(_loop);
 	};
 
 	var _init = function(){
 		_lastRenderTime = _lastUpdateTime = (new Date()).getTime();
-		window.requestAnimationFrame(_loop);
+		if(!_animID) window.requestAnimationFrame(_loop);
 	};
 
 	var _destroy = function(){
 		console.log("Destroyed");
+		if(_animID) window.cancelAnimationFrame(_animID);
 	};
 
 	return {
