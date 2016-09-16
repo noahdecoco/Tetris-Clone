@@ -1,39 +1,39 @@
-GAME_CORE.registerModule("game-controller", function(sb){
+GAME_CORE.registerModule('game-controller', function(sb){
 
 	var _keyDownListener = function(e){
 		switch (e.keyCode) {
 			case 37:
-			console.log('left');
+			sb.publishEvent('move-sigil', ['left']);
 			break;
 			case 38:
-			console.log('up');
+			sb.publishEvent('rotate-sigil');
 			break;
 			case 39:
-			console.log('right');
+			sb.publishEvent('move-sigil', ['right']);
 			break;
 			case 40:
-			console.log('down');
+			sb.publishEvent('move-sigil', ['down']);
 			break;
 			case 32:
-			console.log('slam');
+			sb.publishEvent('slam');
 			break;
 		}
-		window.removeEventListener("keydown", _keyDownListener);
-		window.addEventListener("keyup", _keyUpListener);
+		sb.removeEventListener(window, 'keydown', _keyDownListener);
+		sb.addEventListener(window, 'keyup', _keyUpListener);
 	};
 
 	var _keyUpListener = function(){
-		window.addEventListener("keydown", _keyDownListener);
-		window.removeEventListener("keyup", _keyUpListener);
+		sb.addEventListener(window, 'keydown', _keyDownListener);
+		sb.removeEventListener(window, 'keyup', _keyUpListener);
 	};
 
 	var _init = function(){
-		window.addEventListener("keydown", _keyDownListener);
+		sb.addEventListener(window, 'keydown', _keyDownListener);
 	};
 
 	var _destroy = function(){
-		window.removeEventListener("keydown", _keyDownListener);
-		window.removeEventListener("keyup", _keyUpListener);
+		sb.removeEventListener(window, 'keydown', _keyDownListener);
+		sb.removeEventListener(window, 'keyup', _keyUpListener);
 	};
 
 	return {

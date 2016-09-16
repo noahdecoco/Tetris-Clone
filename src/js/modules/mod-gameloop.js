@@ -1,4 +1,4 @@
-GAME_CORE.registerModule("game-loop", function(sb){
+GAME_CORE.registerModule('game-loop', function(sb){
 
 	var _animID;
 	var _lastRenderTime, _lastUpdateTime, _delta, _currentTime;
@@ -6,11 +6,11 @@ GAME_CORE.registerModule("game-loop", function(sb){
 	var _ups = 1000/30;
 
 	var _update = function(){
-		sb.update();
+		sb.publishEvent('update');
 	};
 
 	var _render = function(){
-		sb.render();
+		sb.publishEvent('render');
 	};
 
 	var _loop = function(){
@@ -37,7 +37,7 @@ GAME_CORE.registerModule("game-loop", function(sb){
 	};
 
 	var _destroy = function(){
-		console.log("Destroyed");
+		console.log('Destroyed');
 		if(_animID) window.cancelAnimationFrame(_animID);
 	};
 
