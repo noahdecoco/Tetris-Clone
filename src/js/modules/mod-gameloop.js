@@ -1,7 +1,37 @@
-GAME_CORE.registerModule("game-loop", function(){
+GAME_CORE.registerModule("game-loop", function(sb){
+
+	var _lastRenderTime, _lastUpdateTime, _delta, _currentTime;
+	var _fps = 1000/30;
+	var _ups = 1000/30;
+
+	var _update = function(){
+		sb.update();
+	};
+
+	var _render = function(){
+		sb.render();
+	};
+
+	var _loop = function(){
+		_currTime = (new Date()).getTime();
+
+		_delta = _currTime - _lastUpdateTime;
+		if(_delta > _ups) {
+			_update();
+			_lastUpdateTime = _currTime;
+		}
+
+		_delta = _currTime - _lastRenderTime;
+		if(_delta > _fps) {
+			_render();
+			_lastRenderTime = _currTime;
+		}
+		window.requestAnimationFrame(_loop);
+	};
 
 	var _init = function(){
-		console.log("Inited");
+		_lastRenderTime = _lastUpdateTime = (new Date()).getTime();
+		window.requestAnimationFrame(_loop);
 	};
 
 	var _destroy = function(){

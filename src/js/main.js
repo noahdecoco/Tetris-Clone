@@ -1,2 +1,1 @@
-GAME_CORE.startAllModules();
-GAME_CORE.stopAllModules();
+GAME_CORE.startModule("game-loop");
