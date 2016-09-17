@@ -18,15 +18,25 @@ var GAME_SANDBOX = (function(){
 		_core.removeEventListener(dom, type, event);
 	};
 
+	var _clearCanvas = function(){
+		_core.clearCanvas();
+	};
+
+	var _drawRect = function(x, y, w, h, c) {
+		_core.drawRect(x, y, w, h, c);
+	};
+
 	var _create = function(core, module){
 
 		_core = core; _module = module;
 
 		return {
-			subscribeEvent : _subscribeEvent,
-			publishEvent : _publishEvent,
-			addEventListener : _addEventListener,
-			removeEventListener : _removeEventListener
+			subscribeEvent      : _subscribeEvent,
+			publishEvent        : _publishEvent,
+			addEventListener    : _addEventListener,
+			removeEventListener : _removeEventListener,
+			clearCanvas         : _clearCanvas,
+			drawRect            : _drawRect
 		};
 	};
 

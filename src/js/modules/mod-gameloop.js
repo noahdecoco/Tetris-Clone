@@ -10,6 +10,7 @@ GAME_CORE.registerModule('game-loop', function(sb){
 	};
 
 	var _render = function(){
+		sb.clearCanvas();
 		sb.publishEvent('render');
 	};
 
