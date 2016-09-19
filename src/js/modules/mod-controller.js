@@ -18,8 +18,8 @@ GAME_CORE.registerModule('game-controller', function(sb){
 			sb.publishEvent('slam');
 			break;
 		}
-		sb.removeEventListener(window, 'keydown', _keyDownListener);
-		sb.addEventListener(window, 'keyup', _keyUpListener);
+		// sb.removeEventListener(window, 'keydown', _keyDownListener);
+		// sb.addEventListener(window, 'keyup', _keyUpListener);
 	};
 
 	var _keyUpListener = function(){

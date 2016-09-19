@@ -3,14 +3,14 @@ GAME_CORE.registerModule('sigil', function(sb){
 	var _types = [
 		// L
 		[
-			[0],[0],[0],[0],
 			[0],[1],[0],[0],
 			[0],[1],[0],[0],
-			[0],[1],[1],[0]
+			[0],[1],[0],[0],
+			[0],[1],[0],[0]
 		]
 	];
 
-	var _cellSize = 20;
+	var _cellSize = 40;
 	var _x = 0, _y = 0;
 	var _speed = 1.8;
 	var _tempY = 0;
@@ -23,7 +23,7 @@ GAME_CORE.registerModule('sigil', function(sb){
 			var x = _x + (Math.floor(i%_row) * _cellSize);
 			var y = _y + (Math.floor(i/_row) * _cellSize);
 			if(_currSigil[i][0] === 1) {
-				sb.drawRect(x,y,_cellSize,_cellSize,'#99ff00');
+				sb.drawRect(x,y,_cellSize,_cellSize,'#52bbae');
 			} else {
 				sb.drawRect(x,y,_cellSize,_cellSize,'#eeeeee');
 			}
@@ -42,21 +42,23 @@ GAME_CORE.registerModule('sigil', function(sb){
 		console.log("sigil moving " + dir);
 		switch(dir) {
 			case 'right':
-				_x += _cellSize;
+				if(_isEmptyBeside(_cellSize)) _x += _cellSize;
 				break;
 			case 'left':
-				_x -= _cellSize;
+				if(_isEmptyBeside(-_cellSize)) _x -= _cellSize;
 				break;
 			case 'down':
-				_y += _cellSize;
+				if(_isEmptyBelow(_cellSize)) _y += _cellSize;
 				break;
 		}
 	};
 
 	var _rotate = function() {
 		var temp = [];
+		var i = 0;
 		temp.length = _currSigil.length;
-		for (var i = 0; i < _currSigil.length; i++){
+		// if(!_isEmptyBelow(0)) return false;
+		for (i = 0; i < _currSigil.length; i++){
 			var x = i % _row;
 			var y = Math.floor(i/_row);
 			var newX = _row - y - 1;
@@ -65,6 +67,41 @@ GAME_CORE.registerModule('sigil', function(sb){
 			temp[newIndex] = _currSigil[i];
 		}
 		_currSigil = temp;
+		// Reposition if out of bounds
+		_restrictToBounds();
+	};
+
+	var _restrictToBounds = function(){
+		for (i = 0; i < _currSigil.length; i++){
+			var x = _x + (Math.floor(i%_row) * _cellSize);
+			var y = _y + (Math.floor(i/_row) * _cellSize);
+			if(x < 0 && _currSigil[i] == 1) _x += x*-1;
+			if(x >= 400 && _currSigil[i] == 1) _x += x - (400 + _cellSize);
+			if(y >= 600 && _currSigil[i] == 1) _y += y - (600 + _cellSize);
+		}
+	};
+
+	var _isEmptyBeside = function(offset){
+		for (i = 0; i < _currSigil.length; i++){
+			var x = _x + (Math.floor(i%_row) * _cellSize) + offset;
+			console.log(x);
+			if((x < 0 && _currSigil[i] == 1) || (x >= 400 && _currSigil[i] == 1)) {
+				// TODO: Check for other pieces
+				return false;
+			}
+		}
+		return true;
+	};
+
+	var _isEmptyBelow = function(offset){
+		for (i = 0; i < _currSigil.length; i++){
+			var y = _y + (Math.floor(i/_row) * _cellSize) + offset;
+			if(y >= 600 && _currSigil[i] == 1) {
+				// TODO: Check for other pieces
+				return false;
+			}
+		}
+		return true;
 	};
 	
 	var _init = function(){
