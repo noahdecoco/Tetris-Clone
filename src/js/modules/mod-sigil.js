@@ -1,8 +1,32 @@
 GAME_CORE.registerModule('sigil', function(sb){
 
 	var _types = [
-		// L
-		[
+
+		[ // L
+			[0],[1],[0],[0],
+			[0],[1],[0],[0],
+			[0],[1],[1],[0],
+			[0],[0],[0],[0]
+		],
+		[ // L reverse
+			[0],[0],[1],[0],
+			[0],[0],[1],[0],
+			[0],[1],[1],[0],
+			[0],[0],[0],[0]
+		],
+		[ // []
+			[0],[0],[0],[0],
+			[0],[1],[1],[0],
+			[0],[1],[1],[0],
+			[0],[0],[0],[0]
+		],
+		[ // T
+			[0],[0],[0],[0],
+			[1],[1],[1],[0],
+			[0],[1],[0],[0],
+			[0],[0],[0],[0]
+		],
+		[ // |
 			[0],[1],[0],[0],
 			[0],[1],[0],[0],
 			[0],[1],[0],[0],
@@ -10,12 +34,12 @@ GAME_CORE.registerModule('sigil', function(sb){
 		]
 	];
 
-	var _cellSize = 40;
+	var _cellSize;
 	var _x = 0, _y = 0;
 	var _speed = 1.8;
 	var _tempY = 0;
 
-	var _currSigil = _types[0];
+	var _currSigil = _types[Math.floor(Math.random()*_types.length)];
 	var _row = 4;
 
 	var _draw = function() {
@@ -25,7 +49,7 @@ GAME_CORE.registerModule('sigil', function(sb){
 			if(_currSigil[i][0] === 1) {
 				sb.drawRect(x,y,_cellSize,_cellSize,'#52bbae');
 			} else {
-				sb.drawRect(x,y,_cellSize,_cellSize,'#eeeeee');
+				// sb.drawRect(x,y,_cellSize,_cellSize,'#eee');
 			}
 		}
 	};
@@ -34,12 +58,12 @@ GAME_CORE.registerModule('sigil', function(sb){
 		_tempY += _speed;
 		if(_tempY >= _cellSize){
 			_tempY = 0;
+			_move('down');
 			// _y += _cellSize;
 		}
 	};
 
 	var _move = function(dir) {
-		console.log("sigil moving " + dir);
 		switch(dir) {
 			case 'right':
 				if(_isEmptyBeside(_cellSize)) _x += _cellSize;
@@ -48,7 +72,11 @@ GAME_CORE.registerModule('sigil', function(sb){
 				if(_isEmptyBeside(-_cellSize)) _x -= _cellSize;
 				break;
 			case 'down':
-				if(_isEmptyBelow(_cellSize)) _y += _cellSize;
+				if(_isEmptyBelow(_cellSize)) {
+					_y += _cellSize;
+				} else {
+					sb.publishEvent('sigil-fixed', [_currSigil, _x, _y]);
+				}
 				break;
 		}
 	};
@@ -84,7 +112,6 @@ GAME_CORE.registerModule('sigil', function(sb){
 	var _isEmptyBeside = function(offset){
 		for (i = 0; i < _currSigil.length; i++){
 			var x = _x + (Math.floor(i%_row) * _cellSize) + offset;
-			console.log(x);
 			if((x < 0 && _currSigil[i] == 1) || (x >= 400 && _currSigil[i] == 1)) {
 				// TODO: Check for other pieces
 				return false;
@@ -103,10 +130,18 @@ GAME_CORE.registerModule('sigil', function(sb){
 		}
 		return true;
 	};
+
+	var _reset = function(){
+		_x = _y = 0;
+		_currSigil = _types[Math.floor(Math.random()*_types.length)];
+		for(var i = 0; i < 3; i++) _rotate();
+	};
 	
 	var _init = function(){
+		_cellSize = sb.getGridData().cellSize;
 		sb.subscribeEvent("move-sigil", _move);
 		sb.subscribeEvent("rotate-sigil", _rotate);
+		sb.subscribeEvent("reset-sigil", _reset);
 		sb.subscribeEvent("render", _draw);
 		sb.subscribeEvent("update", _update);
 	};

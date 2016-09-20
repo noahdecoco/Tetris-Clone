@@ -26,6 +26,10 @@ var GAME_SANDBOX = (function(){
 		_core.drawRect(x, y, w, h, c);
 	};
 
+	var _getGridData = function(){
+		return _core.getGridData();
+	};
+
 	var _create = function(core, module){
 
 		_core = core; _module = module;
@@ -36,7 +40,8 @@ var GAME_SANDBOX = (function(){
 			addEventListener    : _addEventListener,
 			removeEventListener : _removeEventListener,
 			clearCanvas         : _clearCanvas,
-			drawRect            : _drawRect
+			drawRect            : _drawRect,
+			getGridData         : _getGridData
 		};
 	};
 
