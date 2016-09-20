@@ -31,16 +31,27 @@ GAME_CORE.registerModule('sigil', function(sb){
 			[0],[1],[0],[0],
 			[0],[1],[0],[0],
 			[0],[1],[0],[0]
+		],
+		[ // S
+			[0],[0],[1],[0],
+			[0],[1],[1],[0],
+			[0],[1],[0],[0],
+			[0],[0],[0],[0]
+		],
+		[ // Z
+			[0],[1],[0],[0],
+			[0],[1],[1],[0],
+			[0],[0],[1],[0],
+			[0],[0],[0],[0]
 		]
 	];
 
-	var _cellSize;
-	var _x = 0, _y = 0;
-	var _speed = 1.8;
+	var _cellSize, _x, _y;
+	var _speed = 2;
 	var _tempY = 0;
-
-	var _currSigil = _types[Math.floor(Math.random()*_types.length)];
 	var _row = 4;
+
+	var _currSigil, _nextSigil = _types[Math.floor(Math.random()*_types.length)];
 
 	var _draw = function() {
 		for(var i = 0; i < _currSigil.length; i++){
@@ -112,9 +123,11 @@ GAME_CORE.registerModule('sigil', function(sb){
 	var _isEmptyBeside = function(offset){
 		for (i = 0; i < _currSigil.length; i++){
 			var x = _x + (Math.floor(i%_row) * _cellSize) + offset;
-			if((x < 0 && _currSigil[i] == 1) || (x >= 400 && _currSigil[i] == 1)) {
-				// TODO: Check for other pieces
-				return false;
+			var y = _y + (Math.floor(i/_row) * _cellSize);
+			if(_currSigil[i] == 1){
+				if(x < 0 || x >= 400 || sb.checkCell(x, y) === 1) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -122,23 +135,28 @@ GAME_CORE.registerModule('sigil', function(sb){
 
 	var _isEmptyBelow = function(offset){
 		for (i = 0; i < _currSigil.length; i++){
+			var x = _x + (Math.floor(i%_row) * _cellSize);
 			var y = _y + (Math.floor(i/_row) * _cellSize) + offset;
-			if(y >= 600 && _currSigil[i] == 1) {
-				// TODO: Check for other pieces
-				return false;
+			if(_currSigil[i] == 1){
+				if(y >= 600 || sb.checkCell(x, y) === 1) {
+					return false;
+				}
 			}
 		}
 		return true;
 	};
 
 	var _reset = function(){
-		_x = _y = 0;
-		_currSigil = _types[Math.floor(Math.random()*_types.length)];
-		for(var i = 0; i < 3; i++) _rotate();
+		_x = 3*_cellSize;
+		_y = 0;
+		_currSigil = _nextSigil;
+		_nextSigil = _types[Math.floor(Math.random()*_types.length)];
+		for(var i = 0; i < Math.floor(Math.random()*3); i++) _rotate();
 	};
 	
 	var _init = function(){
 		_cellSize = sb.getGridData().cellSize;
+		_reset();
 		sb.subscribeEvent("move-sigil", _move);
 		sb.subscribeEvent("rotate-sigil", _rotate);
 		sb.subscribeEvent("reset-sigil", _reset);

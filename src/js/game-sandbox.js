@@ -26,9 +26,18 @@ var GAME_SANDBOX = (function(){
 		_core.drawRect(x, y, w, h, c);
 	};
 
+	var _checkCell = function(x,y){
+		return _core.checkCell(x,y);
+	};
+
+	var _setGridData = function(key, data){
+		return _core.setGridData(key, data);
+	};
+
 	var _getGridData = function(){
 		return _core.getGridData();
 	};
+
 
 	var _create = function(core, module){
 
@@ -41,6 +50,8 @@ var GAME_SANDBOX = (function(){
 			removeEventListener : _removeEventListener,
 			clearCanvas         : _clearCanvas,
 			drawRect            : _drawRect,
+			checkCell           : _checkCell,
+			setGridData         : _setGridData,
 			getGridData         : _getGridData
 		};
 	};

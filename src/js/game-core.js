@@ -1,13 +1,12 @@
 var GAME_CORE = (function(){
 
-	var _debugMode = true;
+	var _debugMode = false;
 	var _this = {};
 	var _modules = {};
 	var _events = {};
 	var _canvas, _ctx;
 	var _gridData = {};
 	var _grid = [];
-	var _cellSize;
 
 	var _debug = function(msg, type) {
 		var _type = type || 'log';
@@ -67,8 +66,12 @@ var GAME_CORE = (function(){
 	};
 
 	var _publishEvent = function(_event, _data) {
-		if(typeof _event != 'string' || typeof _events[_event] == 'undefined') {
+		if(typeof _event != 'string'){
 			_debug('Failed to trigger Event ' + _event, 'error');
+			return false;
+		}
+		if(typeof _events[_event] == 'undefined') {
+			_debug('Event "' + _event + '" hasn\'t been created yet', 'warn');
 			return false;
 		}
 		for (var i = 0; i < _events[_event].length; i++){
@@ -97,10 +100,18 @@ var GAME_CORE = (function(){
 
 	};
 
-	var _checkCells = function(){
-
+	var _checkCell = function(x,y){
+		return _gridData.grid[y/_gridData.cellSize][x/_gridData.cellSize];
 	};
 
+	var _getGridData = function(){
+		return _gridData;
+	};
+
+	var _setGridData = function(key, data){
+		_gridData[key] = data;
+		console.log(_gridData);
+	};
 	
 
 	// RENDERING
@@ -123,11 +134,7 @@ var GAME_CORE = (function(){
 		_ctx.strokeStyle = "#fff";
 		_ctx.stroke();
 	};
-
-	// Getters
-	var _getGridData = function(){
-		return _gridData;
-	};
+	
 
 	// Initialise
 	var _initGame = function(cvsId, w, h, c){
@@ -154,8 +161,13 @@ var GAME_CORE = (function(){
 		createCanvas        : _createCanvas,
 		clearCanvas         : _clearCanvas,
 		drawRect            : _drawRect,
-		// GETTERES
+		// GRID
+		checkRows           : _checkRows,
+		clearRows           : _clearRows,
+		fillCells           : _fillCells,
+		checkCell           : _checkCell,
 		getGridData         : _getGridData,
+		setGridData         : _setGridData,
 		// INITITIALISE
 		initGame            : _initGame
 	};
