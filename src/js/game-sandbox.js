@@ -30,6 +30,10 @@ var GAME_SANDBOX = (function(){
 		return _core.checkCell(x,y);
 	};
 
+	var _checkRows = function(){
+		return _core.checkRows();
+	};
+
 	var _setGridData = function(key, data){
 		return _core.setGridData(key, data);
 	};
@@ -51,6 +55,7 @@ var GAME_SANDBOX = (function(){
 			clearCanvas         : _clearCanvas,
 			drawRect            : _drawRect,
 			checkCell           : _checkCell,
+			checkRows           : _checkRows,
 			setGridData         : _setGridData,
 			getGridData         : _getGridData
 		};

@@ -159,7 +159,7 @@ GAME_CORE.registerModule('sigil', function(sb){
 		_reset();
 		sb.subscribeEvent("move-sigil", _move);
 		sb.subscribeEvent("rotate-sigil", _rotate);
-		sb.subscribeEvent("reset-sigil", _reset);
+		sb.subscribeEvent('sigil-settled', _reset);
 		sb.subscribeEvent("render", _draw);
 		sb.subscribeEvent("update", _update);
 	};

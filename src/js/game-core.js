@@ -89,14 +89,30 @@ var GAME_CORE = (function(){
 
 	// GRID
 	var _checkRows = function(){
-
+		console.log("checking rows");
+		var rowFull = true, r, c;
+		for(r = 0; r < _gridData.rows; r++){
+			// console.log(_gridData.grid[r]);
+			rowFull = true;
+			for(c = 0; c < _gridData.cols; c++) {
+				if(_gridData.grid[r][c] === 0) {
+					// console.log("not full");
+					rowFull = false;
+					break;
+				}
+			}
+			if(rowFull) {
+				_gridData.grid.splice(r,1);
+				var tempRow = [];
+				for(c = 0; c < _gridData.cols; c++) {
+					tempRow.push(0);
+				}
+				_gridData.grid.unshift(tempRow);
+			}
+		}
 	};
 
 	var _clearRows = function(){
-
-	};
-
-	var _fillCells = function(){
 
 	};
 
@@ -110,7 +126,6 @@ var GAME_CORE = (function(){
 
 	var _setGridData = function(key, data){
 		_gridData[key] = data;
-		console.log(_gridData);
 	};
 	
 
@@ -142,6 +157,7 @@ var GAME_CORE = (function(){
 		_gridData.cellSize = c;
 		_gridData.rows = _canvas.height/c;
 		_gridData.cols = _canvas.width/c;
+		_subscribeEvent('sigil-settled', _checkRows);
 	};
 
 
@@ -164,7 +180,6 @@ var GAME_CORE = (function(){
 		// GRID
 		checkRows           : _checkRows,
 		clearRows           : _clearRows,
-		fillCells           : _fillCells,
 		checkCell           : _checkCell,
 		getGridData         : _getGridData,
 		setGridData         : _setGridData,

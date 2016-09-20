@@ -22,7 +22,7 @@ GAME_CORE.registerModule('grid', function(sb){
 			}
 		}
 		sb.setGridData("grid", sb.getGridData().grid);
-		sb.publishEvent('reset-sigil');
+		sb.publishEvent('sigil-settled');
 	};
 
 	var _init = function(){
