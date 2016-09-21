@@ -4,6 +4,7 @@ GAME_CORE.registerModule('game-loop', function(sb){
 	var _lastRenderTime, _lastUpdateTime, _delta, _currentTime;
 	var _fps = 1000/30;
 	var _ups = 1000/30;
+	var _isPaused = false;
 
 	var _update = function(){
 		sb.publishEvent('update');
@@ -28,12 +29,18 @@ GAME_CORE.registerModule('game-loop', function(sb){
 			_render();
 			_lastRenderTime = _currTime;
 		}
-
+		if(_isPaused) return;
 		_animID = window.requestAnimationFrame(_loop);
+	};
+
+	var _togglePause = function(isPaused){
+		_isPaused = isPaused;
+		if(!_isPaused) _loop();
 	};
 
 	var _init = function(){
 		_lastRenderTime = _lastUpdateTime = (new Date()).getTime();
+		sb.subscribeEvent("toggle-pause", _togglePause);
 		if(!_animID) window.requestAnimationFrame(_loop);
 	};
 
