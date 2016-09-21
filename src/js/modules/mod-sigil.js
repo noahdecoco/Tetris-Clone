@@ -1,7 +1,12 @@
 GAME_CORE.registerModule('sigil', function(sb){
 
 	var _types = [
-
+		/*[ // FATSO
+			[0],[0],[0],[0],
+			[0],[0],[0],[0],
+			[1],[1],[1],[1],
+			[1],[1],[1],[1]
+		]*/
 		[ // L
 			[0],[1],[0],[0],
 			[0],[1],[0],[0],
@@ -70,7 +75,6 @@ GAME_CORE.registerModule('sigil', function(sb){
 		if(_tempY >= _cellSize){
 			_tempY = 0;
 			_move('down');
-			// _y += _cellSize;
 		}
 	};
 
@@ -96,7 +100,6 @@ GAME_CORE.registerModule('sigil', function(sb){
 		var temp = [];
 		var i = 0;
 		temp.length = _currSigil.length;
-		// if(!_isEmptyBelow(0)) return false;
 		for (i = 0; i < _currSigil.length; i++){
 			var x = i % _row;
 			var y = Math.floor(i/_row);
@@ -108,6 +111,10 @@ GAME_CORE.registerModule('sigil', function(sb){
 		_currSigil = temp;
 		// Reposition if out of bounds
 		_restrictToBounds();
+	};
+
+	var _levelUp = function() {
+		_speed += 2;
 	};
 
 	var _restrictToBounds = function(){
@@ -162,6 +169,7 @@ GAME_CORE.registerModule('sigil', function(sb){
 		sb.subscribeEvent('sigil-settled', _reset);
 		sb.subscribeEvent("render", _draw);
 		sb.subscribeEvent("update", _update);
+		sb.subscribeEvent("level-up", _levelUp);
 	};
 
 	var _destroy = function(){

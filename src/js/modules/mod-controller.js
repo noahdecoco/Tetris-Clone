@@ -15,7 +15,8 @@ GAME_CORE.registerModule('game-controller', function(sb){
 			sb.publishEvent('move-sigil', ['down']);
 			break;
 			case 32:
-			sb.publishEvent('slam');
+			sb.publishEvent('rotate-sigil');
+			// sb.publishEvent('slam');
 			break;
 		}
 		// sb.removeEventListener(window, 'keydown', _keyDownListener);

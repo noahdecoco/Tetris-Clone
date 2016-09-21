@@ -108,12 +108,9 @@ var GAME_CORE = (function(){
 					tempRow.push(0);
 				}
 				_gridData.grid.unshift(tempRow);
+				_publishEvent('row-cleared');
 			}
 		}
-	};
-
-	var _clearRows = function(){
-
 	};
 
 	var _checkCell = function(x,y){
@@ -179,7 +176,6 @@ var GAME_CORE = (function(){
 		drawRect            : _drawRect,
 		// GRID
 		checkRows           : _checkRows,
-		clearRows           : _clearRows,
 		checkCell           : _checkCell,
 		getGridData         : _getGridData,
 		setGridData         : _setGridData,
