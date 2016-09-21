@@ -2,7 +2,7 @@ GAME_CORE.registerModule('game-loop', function(sb){
 
 	var _animID;
 	var _lastRenderTime, _lastUpdateTime, _delta, _currentTime;
-	var _fps = 1000/30;
+	var _fps = 1000/15;
 	var _ups = 1000/30;
 	var _isPaused = false;
 

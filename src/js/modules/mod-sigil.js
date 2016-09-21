@@ -65,7 +65,7 @@ GAME_CORE.registerModule('sigil', function(sb){
 			if(_currSigil[i][0] === 1) {
 				sb.drawRect(x,y,_cellSize,_cellSize,'#52bbae');
 			} else {
-				// sb.drawRect(x,y,_cellSize,_cellSize,'#eee');
+				sb.drawRect(x,y,_cellSize,_cellSize,'#eee');
 			}
 		}
 	};
@@ -81,13 +81,13 @@ GAME_CORE.registerModule('sigil', function(sb){
 	var _move = function(dir) {
 		switch(dir) {
 			case 'right':
-				if(_isEmptyBeside(_cellSize)) _x += _cellSize;
+				if(_isCellEmpty(_currSigil, _cellSize, 0)) _x += _cellSize;
 				break;
 			case 'left':
-				if(_isEmptyBeside(-_cellSize)) _x -= _cellSize;
+				if(_isCellEmpty(_currSigil, -_cellSize, 0)) _x -= _cellSize;
 				break;
 			case 'down':
-				if(_isEmptyBelow(_cellSize)) {
+				if(_isCellEmpty(_currSigil, 0, _cellSize)) {
 					_y += _cellSize;
 				} else {
 					sb.publishEvent('sigil-fixed', [_currSigil, _x, _y]);
@@ -97,55 +97,102 @@ GAME_CORE.registerModule('sigil', function(sb){
 	};
 
 	var _rotate = function() {
-		var temp = [];
+		var tempSigil = [];
 		var i = 0;
-		temp.length = _currSigil.length;
+		tempSigil.length = _currSigil.length;
 		for (i = 0; i < _currSigil.length; i++){
 			var x = i % _row;
 			var y = Math.floor(i/_row);
 			var newX = _row - y - 1;
 			var newY = x;
 			var newIndex = newY * _row + newX;
-			temp[newIndex] = _currSigil[i];
+			tempSigil[newIndex] = _currSigil[i];
 		}
-		_currSigil = temp;
+
+		if(_hasSpaceToRotate(tempSigil)) {
+			console.log("can rotate");
+			_currSigil = tempSigil;
+		}
 		// Reposition if out of bounds
-		_restrictToBounds();
 	};
 
 	var _levelUp = function() {
 		_speed += 2;
 	};
 
-	var _restrictToBounds = function(){
-		for (i = 0; i < _currSigil.length; i++){
-			var x = _x + (Math.floor(i%_row) * _cellSize);
-			var y = _y + (Math.floor(i/_row) * _cellSize);
-			if(x < 0 && _currSigil[i] == 1) _x += x*-1;
-			if(x >= 400 && _currSigil[i] == 1) _x += x - (400 + _cellSize);
-			if(y >= 600 && _currSigil[i] == 1) _y += y - (600 + _cellSize);
-		}
-	};
+	var _hasSpaceToRotate = function(sigil){
+		var x, y;
+		for (i = 0; i < sigil.length; i++){
+			if(sigil[i] == 1){
 
-	var _isEmptyBeside = function(offset){
-		for (i = 0; i < _currSigil.length; i++){
-			var x = _x + (Math.floor(i%_row) * _cellSize) + offset;
-			var y = _y + (Math.floor(i/_row) * _cellSize);
-			if(_currSigil[i] == 1){
-				if(x < 0 || x >= 400 || sb.checkCell(x, y) === 1) {
-					return false;
+				x = _x + (Math.floor(i%_row) * _cellSize);
+				y = _y + (Math.floor(i/_row) * _cellSize);
+				console.log("cehking...", x,y);
+				// If rotating makes it go off the left side of canvas,
+				// check if it can be shifted to the right
+				// If possible, shift and rotate
+				if(x < 0) {
+					if(_isCellEmpty(sigil, _cellSize, 0)) {
+						_x += x*-1;
+						return true;
+					} else {
+						return false;
+					}
+				}
+				// If rotating makes it go off the right side of canvas,
+				// check if it can be shifted to the left
+				// If possible, shift and rotate
+				if(x >= 400) {
+					if(_isCellEmpty(sigil, -_cellSize, 0)) {
+						_x += x - (400 + _cellSize);
+						return true;
+					} else {
+						return false;
+					}
+				}
+				// If rotating makes it go off the bottom of canvas,
+				// shift it higher
+				if(y >= 600) {
+					_y += y - (600 + _cellSize);
+					return true;
+				}
+				// If rotating makes it overlap blocked cells,
+				// Check if it can be shifted left or right
+				// If so, shift and rotate
+				if(sb.checkCell(x, y) === 1) {
+					if(x-_x >= 80) {
+						if(_isCellEmpty(sigil, -_cellSize, 0)){
+							_x -= _cellSize;
+							return true;
+						} else {
+							return false;
+						}
+					} else {
+						if(_isCellEmpty(sigil, +_cellSize, 0)){
+							_x += _cellSize;
+							return true;
+						} else {
+							return false;
+						}
+					}
 				}
 			}
 		}
 		return true;
 	};
 
-	var _isEmptyBelow = function(offset){
-		for (i = 0; i < _currSigil.length; i++){
-			var x = _x + (Math.floor(i%_row) * _cellSize);
-			var y = _y + (Math.floor(i/_row) * _cellSize) + offset;
-			if(_currSigil[i] == 1){
-				if(y >= 600 || sb.checkCell(x, y) === 1) {
+	var _isCellEmpty = function(sigil, xOffset, yOffset){
+		for (i = 0; i < sigil.length; i++){
+			var x = _x + (Math.floor(i%_row) * _cellSize) + xOffset;
+			var y = _y + (Math.floor(i/_row) * _cellSize) + yOffset;
+			if(sigil[i] == 1){
+				if(x < 0 || x >= 400) { 
+					return false;
+				}
+				if(y >= 600) {
+					return false;
+				}
+				if(sb.checkCell(x, y) === 1) {
 					return false;
 				}
 			}
