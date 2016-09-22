@@ -65,7 +65,7 @@ GAME_CORE.registerModule('sigil', function(sb){
 			if(_currSigil[i][0] === 1) {
 				sb.drawRect(x,y,_cellSize,_cellSize,'#52bbae');
 			} else {
-				sb.drawRect(x,y,_cellSize,_cellSize,'#eee');
+				// sb.drawRect(x,y,_cellSize,_cellSize,'#eee');
 			}
 		}
 	};
@@ -110,7 +110,7 @@ GAME_CORE.registerModule('sigil', function(sb){
 		}
 
 		if(_hasSpaceToRotate(tempSigil)) {
-			console.log("can rotate");
+			console.log('can rotate');
 			_currSigil = tempSigil;
 		}
 		// Reposition if out of bounds
@@ -127,7 +127,7 @@ GAME_CORE.registerModule('sigil', function(sb){
 
 				x = _x + (Math.floor(i%_row) * _cellSize);
 				y = _y + (Math.floor(i/_row) * _cellSize);
-				console.log("cehking...", x,y);
+				console.log('cehking...', x,y);
 				// If rotating makes it go off the left side of canvas,
 				// check if it can be shifted to the right
 				// If possible, shift and rotate
@@ -142,9 +142,9 @@ GAME_CORE.registerModule('sigil', function(sb){
 				// If rotating makes it go off the right side of canvas,
 				// check if it can be shifted to the left
 				// If possible, shift and rotate
-				if(x >= 400) {
+				if(x >= sb.getGridData().width) {
 					if(_isCellEmpty(sigil, -_cellSize, 0)) {
-						_x += x - (400 + _cellSize);
+						_x += x - (sb.getGridData().width + _cellSize);
 						return true;
 					} else {
 						return false;
@@ -152,8 +152,8 @@ GAME_CORE.registerModule('sigil', function(sb){
 				}
 				// If rotating makes it go off the bottom of canvas,
 				// shift it higher
-				if(y >= 600) {
-					_y += y - (600 + _cellSize);
+				if(y >= sb.getGridData().height) {
+					_y += y - (sb.getGridData().height + _cellSize);
 					return true;
 				}
 				// If rotating makes it overlap blocked cells,
@@ -186,10 +186,10 @@ GAME_CORE.registerModule('sigil', function(sb){
 			var x = _x + (Math.floor(i%_row) * _cellSize) + xOffset;
 			var y = _y + (Math.floor(i/_row) * _cellSize) + yOffset;
 			if(sigil[i] == 1){
-				if(x < 0 || x >= 400) { 
+				if(x < 0 || x >= sb.getGridData().width) { 
 					return false;
 				}
-				if(y >= 600) {
+				if(y >= sb.getGridData().height) {
 					return false;
 				}
 				if(sb.checkCell(x, y) === 1) {
@@ -206,17 +206,18 @@ GAME_CORE.registerModule('sigil', function(sb){
 		_currSigil = _nextSigil;
 		_nextSigil = _types[Math.floor(Math.random()*_types.length)];
 		for(var i = 0; i < Math.floor(Math.random()*3); i++) _rotate();
+		if(_isCellEmpty(_currSigil, 0, -_cellSize)) _y -= _cellSize;
 	};
 	
 	var _init = function(){
 		_cellSize = sb.getGridData().cellSize;
 		_reset();
-		sb.subscribeEvent("move-sigil", _move);
-		sb.subscribeEvent("rotate-sigil", _rotate);
+		sb.subscribeEvent('move-sigil', _move);
+		sb.subscribeEvent('rotate-sigil', _rotate);
 		sb.subscribeEvent('sigil-settled', _reset);
-		sb.subscribeEvent("render", _draw);
-		sb.subscribeEvent("update", _update);
-		sb.subscribeEvent("level-up", _levelUp);
+		sb.subscribeEvent('render', _draw);
+		sb.subscribeEvent('update', _update);
+		sb.subscribeEvent('level-up', _levelUp);
 	};
 
 	var _destroy = function(){
@@ -225,6 +226,10 @@ GAME_CORE.registerModule('sigil', function(sb){
 
 	return {
 		init: _init,
+		// reset
+		// start
+		// pause
+		// stop
 		destroy: _destroy
 	};
 });

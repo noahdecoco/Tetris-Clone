@@ -1,4 +1,4 @@
-GAME_CORE.initGame('game-canvas', 400, 600, 40);
+GAME_CORE.initGame('game-canvas', 300, 600, 30);
 
 GAME_CORE.startModule('game-loop');
 GAME_CORE.startModule('game-controller');

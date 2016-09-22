@@ -114,6 +114,7 @@ var GAME_CORE = (function(){
 	};
 
 	var _checkCell = function(x,y){
+		if(y <= 0 || typeof _gridData.grid == 'undefined') return 0;
 		return _gridData.grid[y/_gridData.cellSize][x/_gridData.cellSize];
 	};
 
@@ -135,7 +136,6 @@ var GAME_CORE = (function(){
 	};
 
 	var _clearCanvas = function() {
-		// _ctx.clearRect(0, 0, _canvas.width, _canvas.height);
 		_canvas.width = _canvas.width;
 	};
 
@@ -151,9 +151,13 @@ var GAME_CORE = (function(){
 	// Initialise
 	var _initGame = function(cvsId, w, h, c){
 		_createCanvas(cvsId, w, h);
-		_gridData.cellSize = c;
-		_gridData.rows = _canvas.height/c;
-		_gridData.cols = _canvas.width/c;
+		_gridData = {
+			width    : w,
+			height   : h,
+			cellSize : c,
+			rows     : _canvas.height/c,
+			cols     : _canvas.width/c
+		};
 		_subscribeEvent('sigil-settled', _checkRows);
 	};
 
