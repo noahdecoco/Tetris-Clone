@@ -1,4 +1,4 @@
-GAME_CORE.registerModule('game-loop', function(sb){
+TETRIS.registerModule('game-loop', function(sb){
 
 	var _animID;
 	var _lastRenderTime, _lastUpdateTime, _delta, _currentTime;
@@ -6,46 +6,48 @@ GAME_CORE.registerModule('game-loop', function(sb){
 	var _ups = 1000/30;
 	var _isPaused = false;
 
-	var _update = function(){
-		sb.publishEvent('update');
-	};
-
-	var _render = function(){
-		sb.clearCanvas();
-		sb.publishEvent('render');
-	};
-
 	var _loop = function(){
+
 		_currTime = (new Date()).getTime();
 
-		_delta = _currTime - _lastUpdateTime;
-		if(_delta > _ups) {
-			_update();
-			_lastUpdateTime = _currTime;
-		}
+		switch(sb.getGameState()){
+			case "IS_PLAYING":
 
-		_delta = _currTime - _lastRenderTime;
-		if(_delta > _fps) {
-			_render();
-			_lastRenderTime = _currTime;
+				_delta = _currTime - _lastUpdateTime;
+				if(_delta > _ups) {
+					// UPDATE
+					sb.publishEvent('update');
+					_lastUpdateTime = _currTime;
+				}
+
+				_delta = _currTime - _lastRenderTime;
+				if(_delta > _fps) {
+					// RENDER
+					sb.clearCanvas();
+					sb.publishEvent('render');
+					_lastRenderTime = _currTime;
+				}
+				break;
+
+			case "IS_PAUSED":
+				break;
+
+			case "IS_STOPPED":
+				break;
 		}
-		if(_isPaused) return;
 		_animID = window.requestAnimationFrame(_loop);
-	};
-
-	var _togglePause = function(isPaused){
-		_isPaused = isPaused;
-		if(!_isPaused) _loop();
+		
 	};
 
 	var _init = function(){
 		_lastRenderTime = _lastUpdateTime = (new Date()).getTime();
-		sb.subscribeEvent("toggle-pause", _togglePause);
 		if(!_animID) window.requestAnimationFrame(_loop);
 	};
 
+	var _start = function(){
+	};
+
 	var _destroy = function(){
-		console.log('Destroyed');
 		if(_animID) window.cancelAnimationFrame(_animID);
 	};
 

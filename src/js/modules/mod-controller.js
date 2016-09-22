@@ -1,4 +1,4 @@
-GAME_CORE.registerModule('game-controller', function(sb){
+TETRIS.registerModule('game-controller', function(sb){
 
 	var _gamePaused = false;
 

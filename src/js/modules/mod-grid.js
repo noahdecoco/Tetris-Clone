@@ -1,4 +1,4 @@
-GAME_CORE.registerModule('grid', function(sb){
+TETRIS.registerModule('grid', function(sb){
 
 	var _drawGrid = function(){
 		var r,c;

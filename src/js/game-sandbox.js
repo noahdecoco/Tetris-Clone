@@ -1,4 +1,4 @@
-var GAME_SANDBOX = (function(){
+var TETRIS_SANDBOX = (function(){
 
 	var _core, _module;
 
@@ -42,6 +42,14 @@ var GAME_SANDBOX = (function(){
 		return _core.getGridData();
 	};
 
+	var _setGameState = function(state){
+		return _core.setGameState(state);
+	};
+
+	var _getGameState = function(){
+		return _core.getGameState();
+	};
+
 
 	var _create = function(core, module){
 
@@ -57,7 +65,9 @@ var GAME_SANDBOX = (function(){
 			checkCell           : _checkCell,
 			checkRows           : _checkRows,
 			setGridData         : _setGridData,
-			getGridData         : _getGridData
+			getGridData         : _getGridData,
+			getGameState        : _getGameState,
+			setGameState        : _setGameState
 		};
 	};
 

@@ -1,4 +1,4 @@
-var GAME_CORE = (function(){
+var TETRIS = (function(){
 
 	var _debugMode = false;
 	var _this = {};
@@ -6,7 +6,7 @@ var GAME_CORE = (function(){
 	var _events = {};
 	var _canvas, _ctx;
 	var _gridData = {};
-	var _grid = [];
+	var _gameState = "IS_PAUSED";
 
 	var _debug = function(msg, type) {
 		var _type = type || 'log';
@@ -25,22 +25,22 @@ var GAME_CORE = (function(){
 		};
 	};
 
-	var _startModule = function(_module) {
+	var _initModule = function(_module) {
 		if(typeof _module != 'string' || typeof _modules[_module] == 'undefined') {
 			_debug('Failed to start module ' + _module, 'error');
 			return false;
 		}
-		_modules[_module].instance = _modules[_module].construct(GAME_SANDBOX.create(_this, _module));
+		_modules[_module].instance = _modules[_module].construct(TETRIS_SANDBOX.create(_this, _module));
 		_modules[_module].instance.init();
 	};
 
-	var _startAllModules = function() {
+	var _initAllModules = function() {
 		for(var module in _modules) {
-			_startModule(module);
+			_initModule(module);
 		}
 	};
 
-	var _stopModule = function(_module) {
+	var _destroyModule = function(_module) {
 		if(typeof _module != 'string' || typeof _modules[_module] == 'undefined') {
 			_debug('Failed to stop module ' + _module, 'error');
 			return false;
@@ -49,9 +49,9 @@ var GAME_CORE = (function(){
 		_modules[_module].instance = null;
 	};
 
-	var _stopAllModules = function() {
+	var _destroyAllModules = function() {
 		for(var module in _modules) {
-			_stopModule(module);
+			_destroyModule(module);
 		}
 	};
 
@@ -147,6 +147,13 @@ var GAME_CORE = (function(){
 		_ctx.stroke();
 	};
 	
+	var _getGameState = function(){
+		return _gameState;
+	};
+
+	var _setGameState = function(state){
+		_gameState = state;
+	};
 
 	// Initialise
 	var _initGame = function(cvsId, w, h, c){
@@ -165,10 +172,10 @@ var GAME_CORE = (function(){
 	_this = {
 		// Modules
 		registerModule      : _registerModule,
-		startModule         : _startModule,
-		startAllModules     : _startAllModules,
-		stopModule          : _stopModule,
-		stopAllModules      : _stopAllModules,
+		initModule          : _initModule,
+		initAllModules      : _initAllModules,
+		destroyModule       : _destroyModule,
+		destroyAllModules   : _destroyAllModules,
 		// Events
 		subscribeEvent      : _subscribeEvent,
 		publishEvent        : _publishEvent,
@@ -184,6 +191,8 @@ var GAME_CORE = (function(){
 		getGridData         : _getGridData,
 		setGridData         : _setGridData,
 		// INITITIALISE
+		getGameState        : _getGameState,
+		setGameState        : _setGameState,
 		initGame            : _initGame
 	};
 

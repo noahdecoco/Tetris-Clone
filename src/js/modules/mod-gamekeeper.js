@@ -1,4 +1,4 @@
-GAME_CORE.registerModule('game-keeper', function(sb){
+TETRIS.registerModule('game-keeper', function(sb){
 
 	var _score = 0, _level = 1, _clearedRows = 0, _diffTreshhold = 5, _gamePaused = false;
 
@@ -19,10 +19,11 @@ GAME_CORE.registerModule('game-keeper', function(sb){
 			_gamePaused = !_gamePaused;
 			if(_gamePaused) {
 				e.currentTarget.innerHTML = "PLAY";
+				sb.setGameState('IS_PAUSED');
 			} else {
 				e.currentTarget.innerHTML = "PAUSE";
+				sb.setGameState('IS_PLAYING');
 			}
-			sb.publishEvent("toggle-pause", [_gamePaused]);
 		});
 	};
 

@@ -1,4 +1,4 @@
-GAME_CORE.registerModule('sigil', function(sb){
+TETRIS.registerModule('sigil', function(sb){
 
 	var _types = [
 		/*[ // FATSO
@@ -110,7 +110,6 @@ GAME_CORE.registerModule('sigil', function(sb){
 		}
 
 		if(_hasSpaceToRotate(tempSigil)) {
-			console.log('can rotate');
 			_currSigil = tempSigil;
 		}
 		// Reposition if out of bounds
@@ -127,7 +126,7 @@ GAME_CORE.registerModule('sigil', function(sb){
 
 				x = _x + (Math.floor(i%_row) * _cellSize);
 				y = _y + (Math.floor(i/_row) * _cellSize);
-				console.log('cehking...', x,y);
+				
 				// If rotating makes it go off the left side of canvas,
 				// check if it can be shifted to the right
 				// If possible, shift and rotate
