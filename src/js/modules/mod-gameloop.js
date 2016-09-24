@@ -34,6 +34,16 @@ TETRIS.registerModule('game-loop', function(sb){
 
 			case "IS_STOPPED":
 				break;
+
+			case "IS_OVER":
+				_delta = _currTime - _lastRenderTime;
+				if(_delta > _fps) {
+					// RENDER
+					sb.clearCanvas();
+					sb.publishEvent('render');
+					_lastRenderTime = _currTime;
+				}
+				break;
 		}
 		_animID = window.requestAnimationFrame(_loop);
 		

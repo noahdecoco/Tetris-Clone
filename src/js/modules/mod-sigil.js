@@ -59,6 +59,7 @@ TETRIS.registerModule('sigil', function(sb){
 	var _currSigil, _nextSigil = _types[Math.floor(Math.random()*_types.length)];
 
 	var _draw = function() {
+		if(!_currSigil) return;
 		for(var i = 0; i < _currSigil.length; i++){
 			var x = _x + (Math.floor(i%_row) * _cellSize);
 			var y = _y + (Math.floor(i/_row) * _cellSize);
@@ -79,6 +80,7 @@ TETRIS.registerModule('sigil', function(sb){
 	};
 
 	var _move = function(dir) {
+		if(!_currSigil) return;
 		switch(dir) {
 			case 'right':
 				if(_isCellEmpty(_currSigil, _cellSize, 0)) _x += _cellSize;
@@ -109,7 +111,7 @@ TETRIS.registerModule('sigil', function(sb){
 			tempSigil[newIndex] = _currSigil[i];
 		}
 
-		if(_hasSpaceToRotate(tempSigil)) {
+		if(_hasSpaceToBe(tempSigil)) {
 			_currSigil = tempSigil;
 		}
 		// Reposition if out of bounds
@@ -119,7 +121,7 @@ TETRIS.registerModule('sigil', function(sb){
 		_speed += 2;
 	};
 
-	var _hasSpaceToRotate = function(sigil){
+	var _hasSpaceToBe = function(sigil){
 		var x, y;
 		for (i = 0; i < sigil.length; i++){
 			if(sigil[i] == 1){
@@ -200,23 +202,29 @@ TETRIS.registerModule('sigil', function(sb){
 	};
 
 	var _reset = function(){
-		_x = 3*_cellSize;
+		_x = 3 * _cellSize;
 		_y = 0;
 		_currSigil = _nextSigil;
 		_nextSigil = _types[Math.floor(Math.random()*_types.length)];
 		for(var i = 0; i < Math.floor(Math.random()*3); i++) _rotate();
 		if(_isCellEmpty(_currSigil, 0, -_cellSize)) _y -= _cellSize;
+		if(!_hasSpaceToBe(_currSigil)) {
+			console.log("OVER");
+			_currSigil = [];
+			sb.setGameState("IS_OVER");
+			sb.publishEvent('game-over');
+		}
 	};
 	
 	var _init = function(){
 		_cellSize = sb.getGridData().cellSize;
-		_reset();
 		sb.subscribeEvent('move-sigil', _move);
 		sb.subscribeEvent('rotate-sigil', _rotate);
 		sb.subscribeEvent('sigil-settled', _reset);
 		sb.subscribeEvent('render', _draw);
-		sb.subscribeEvent('update', _update);
+		sb.subscribeEvent('update', _update);	
 		sb.subscribeEvent('level-up', _levelUp);
+		sb.subscribeEvent('game-start', _reset);
 	};
 
 	var _destroy = function(){
@@ -225,10 +233,6 @@ TETRIS.registerModule('sigil', function(sb){
 
 	return {
 		init: _init,
-		// reset
-		// start
-		// pause
-		// stop
 		destroy: _destroy
 	};
 });

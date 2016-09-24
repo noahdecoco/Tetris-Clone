@@ -30,18 +30,18 @@ TETRIS.registerModule('game-controller', function(sb){
 		sb.removeEventListener(window, 'keyup', _keyUpListener);
 	};
 
-	var _togglePause = function(isPaused){
-		_isPaused = isPaused;
-		if(_isPaused) {
-			sb.removeEventListener(window, 'keydown', _keyDownListener);
-		} else {
-			sb.addEventListener(window, 'keydown', _keyDownListener);
-		}
+	var _addListeners = function(){
+		sb.addEventListener(window, 'keydown', _keyDownListener);
+	};
+
+	var _removeListeners = function(){
+		sb.removeEventListener(window, 'keydown', _keyDownListener);
 	};
 	
 	var _init = function(){
 		sb.addEventListener(window, 'keydown', _keyDownListener);
-		sb.subscribeEvent("toggle-pause", _togglePause);
+		sb.subscribeEvent('game-start', _addListeners);
+		sb.subscribeEvent('game-over', _removeListeners);
 	};
 
 	var _destroy = function(){

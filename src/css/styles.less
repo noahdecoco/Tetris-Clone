@@ -1,5 +1,10 @@
 @import 'https://fonts.googleapis.com/css?family=Roboto';
 
+.hidden {
+	opacity: 0;
+	display: none;
+}
+
 body {
 	width: 100%;
 	position: relative;
@@ -32,7 +37,7 @@ a {
 }
 
 .row {
-	max-width: 850px;
+	max-width: 780px;
 	margin: auto;
 	overflow: auto;
 }
@@ -64,4 +69,21 @@ a {
 
 .btn:hover {
 	color: #fff;
+}
+
+#game-canvas {
+	position: relative;
+}
+
+#btn-start {
+	position: absolute;
+	width: 118px;
+	height: 58px;
+	line-height: 58px;
+	background: #222;
+	left: 0;
+	right: 0;
+	top: 411px;
+	margin: auto;
+	cursor: pointer;
 }

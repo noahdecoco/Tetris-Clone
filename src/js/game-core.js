@@ -6,7 +6,7 @@ var TETRIS = (function(){
 	var _events = {};
 	var _canvas, _ctx;
 	var _gridData = {};
-	var _gameState = "IS_PAUSED";
+	var _gameState = "IS_PLAYING";
 
 	var _debug = function(msg, type) {
 		var _type = type || 'log';
@@ -90,6 +90,7 @@ var TETRIS = (function(){
 	// GRID
 	var _checkRows = function(){
 		console.log("checking rows");
+		if(_gameState === "IS_OVER") return;
 		var rowFull = true, r, c;
 		for(r = 0; r < _gridData.rows; r++){
 			// console.log(_gridData.grid[r]);
@@ -168,6 +169,18 @@ var TETRIS = (function(){
 		_subscribeEvent('sigil-settled', _checkRows);
 	};
 
+	var _startGame = function(){
+		_publishEvent("game-start");
+	};
+
+	var _replayGame = function(){
+		_publishEvent("game-start");
+	};
+
+	var _gameOver = function(){
+		_publishEvent("game-over");
+	};
+
 
 	_this = {
 		// Modules
@@ -193,7 +206,9 @@ var TETRIS = (function(){
 		// INITITIALISE
 		getGameState        : _getGameState,
 		setGameState        : _setGameState,
-		initGame            : _initGame
+		initGame            : _initGame,
+		startGame           : _startGame,
+		replayGame          : _replayGame
 	};
 
 	return _this;
