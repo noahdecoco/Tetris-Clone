@@ -28,6 +28,7 @@ TETRIS.registerModule('game-keeper', function(sb){
 
 	var _init = function(){
 		sb.subscribeEvent("row-cleared", _updateGame);
+		sb.subscribeEvent('game-stateChange', _onGameStateChange);
 	};
 
 	var _destroy = function(){

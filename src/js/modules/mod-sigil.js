@@ -128,7 +128,7 @@ TETRIS.registerModule('sigil', function(sb){
 	};
 
 	var _levelUp = function() {
-		_speed += 2;
+		_speed += 1;
 	};
 
 	var _hasSpaceToBe = function(sigil){
@@ -254,6 +254,12 @@ TETRIS.registerModule('sigil', function(sb){
 	var _onGameStateChange =  function(state){
 		var r, c;
 		switch(state) {
+			case 'game-reset':
+				_speed = 2;
+				_tempY = 0;
+				_bomb = false;
+				_numSigils = 0;
+				break;
 			case 'game-play':
 				_spawnSigil();
 				sb.addEventListener(window, 'keydown', _keyDownListener);
