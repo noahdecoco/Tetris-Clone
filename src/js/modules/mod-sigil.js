@@ -93,6 +93,7 @@ TETRIS.registerModule('sigil', function(sb){
 					_y += _cellSize;
 				} else {
 					sb.publishEvent('sigil-fixed', [_currSigil, _x, _y]);
+					_spawnSigil();
 				}
 				break;
 		}
@@ -218,7 +219,7 @@ TETRIS.registerModule('sigil', function(sb){
 		}
 	};
 
-	var _reset = function(){
+	var _spawnSigil = function(){
 		_x = 3 * _cellSize;
 		_y = 0;
 		_currSigil = _nextSigil;
@@ -226,10 +227,24 @@ TETRIS.registerModule('sigil', function(sb){
 		for(var i = 0; i < Math.floor(Math.random()*3); i++) _rotate();
 		if(_isCellEmpty(_currSigil, 0, -_cellSize)) _y -= _cellSize;
 		if(!_hasSpaceToBe(_currSigil)) {
-			console.log("OVER");
-			_currSigil = [];
-			sb.setGameState("IS_OVER");
-			sb.publishEvent('game-over');
+			console.log("DEAD!!!");
+			sb.publishEvent('game-stateChange', ['game-stop']);
+		}
+	};
+
+	var _destroySigil = function(){
+		_currSigil = [];
+	};
+
+	var _onGameStateChange =  function(state){
+		var r, c;
+		switch(state) {
+			case 'game-play':
+				_spawnSigil();
+				break;
+			case 'game-stop':
+				_destroySigil();
+				break;
 		}
 	};
 	
@@ -237,12 +252,11 @@ TETRIS.registerModule('sigil', function(sb){
 		_cellSize = sb.getGridData().cellSize;
 
 		sb.addEventListener(window, 'keydown', _keyDownListener);
+		sb.subscribeEvent('game-stateChange', _onGameStateChange);
 
-		sb.subscribeEvent('sigil-settled', _reset);
 		sb.subscribeEvent('game-render', _draw);
-		// sb.subscribeEvent('game-update', _update);	
+		sb.subscribeEvent('game-update', _update);	
 		sb.subscribeEvent('level-up', _levelUp);
-		sb.subscribeEvent('game-start', _reset);
 	};
 
 	var _destroy = function(){

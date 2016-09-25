@@ -1,13 +1,32 @@
 TETRIS.registerModule('game-controller', function(sb){
 
 	var btnPlay, btnRewind, btnStop;
+	var isStarted = false;
 	var isPlaying = false;
 	var isPaused = false;
+	var isRewind = false;
+
+	var _changeGameState = function(state){
+		switch(state) {
+			case "RESET":
+				break;
+			case "PLAY":
+				break;
+			case "PAUSE":
+				break;
+			case "REWIND":
+				break;
+			case "STOP":
+				break;
+		}
+	};
 
 	var _playGame =function(e){
 		if(!isPlaying){
 			sb.publishEvent('game-stateChange', ['game-reset']);
-			sb.publishEvent('game-stateChange', ['game-play']);
+			setTimeout(function(){
+				sb.publishEvent('game-stateChange', ['game-play']);
+			}, 2500);
 			isPlaying = true;
 			btnPlay.innerHTML = "PAUSE";
 		} else {
@@ -19,12 +38,17 @@ TETRIS.registerModule('game-controller', function(sb){
 				btnPlay.innerHTML = "PLAY";
 			}
 			isPaused = !isPaused;
+			isRewind = false;
 		}
+		isStarted = true;
 	};
 
 	var _rewindGame =function(e){
 		if(isPlaying){
 			sb.publishEvent('game-stateChange', ['game-rewind']);
+			sb.addEventListener(btnRewind, 'mouseup', _playGame);
+			isPaused = !isPaused;
+			isRewind = true;
 		}
 	};
 
@@ -35,6 +59,7 @@ TETRIS.registerModule('game-controller', function(sb){
 			sb.publishEvent('game-stateChange', ['game-stop']);
 			btnPlay.innerHTML = "START";
 		}
+		isStarted = false;
 	};
 
 	var _init = function(){
@@ -42,8 +67,8 @@ TETRIS.registerModule('game-controller', function(sb){
 		sb.addEventListener(btnPlay, 'click', _playGame);
 
 		btnRewind = document.getElementById('btn-rewind');
-		sb.addEventListener(btnRewind, 'keydown', _rewindGame);
-		sb.addEventListener(btnRewind, 'keydown', _rewindGame);
+		sb.addEventListener(btnRewind, 'mousedown', _rewindGame);
+		sb.addEventListener(btnRewind, 'mouseup', _playGame);
 
 		btnStop = document.getElementById('btn-stop');
 		sb.addEventListener(btnStop, 'click', _stopGame);

@@ -14,6 +14,7 @@ TETRIS.registerModule('grid', function(sb){
 	};
 
 	var _blockCells = function(sigil,x,y){
+		console.log("block");
 		for(var i = 0; i < sigil.length; i++) {
 			if(sigil[i] == 1){
 				var posX = x + (i%4)*sb.getGridData().cellSize;
@@ -22,37 +23,56 @@ TETRIS.registerModule('grid', function(sb){
 			}
 		}
 		sb.setGridData("grid", sb.getGridData().grid);
-		sb.publishEvent('sigil-settled');
+		_checkRows();
+	};
+
+	var _checkRows = function(){
+		console.log("checking rows");
+		var rowFull = true, r, c;
+		for(r = 0; r < sb.getGridData().rows; r++){
+			// console.log(sb.getGridData().grid[r]);
+			rowFull = true;
+			for(c = 0; c < sb.getGridData().cols; c++) {
+				if(sb.getGridData().grid[r][c] === 0) {
+					// console.log("not full");
+					rowFull = false;
+					break;
+				}
+			}
+			if(rowFull) {
+				sb.getGridData().grid.splice(r,1);
+				var tempRow = [];
+				for(c = 0; c < sb.getGridData().cols; c++) {
+					tempRow.push(0);
+				}
+				sb.getGridData().grid.unshift(tempRow);
+				sb.publishEvent('row-cleared');
+			}
+		}
 	};
 
 	var _updateCell = function(r,c,val){
 		sb.getGridData().grid[r][c] = val;
-		if(r === sb.getGridData().rows-1 && c === sb.getGridData().cols-1) {
-			if(val === 0) {
-				console.log("start");
-				sb.publishEvent("game-start");
-			} else if (val === 1) {
-				console.log("over");
-				// sb.setGameState("IS_STOPPED");
-			}
-		}
-	};
-	
-	var _onStart = function(){
-		var r, c;
-		for(r = 0; r < sb.getGridData().rows; r++){
-			for(c = 0; c < sb.getGridData().cols; c++){
-				setTimeout(_updateCell.bind(null,r,c,0), (r*10+c)*10);
-			}
-		}
 	};
 
-	var _onOver = function(){
+	var _onGameStateChange =  function(state){
+		console.log('State: ' , state);
 		var r, c;
-		for(r = 0; r < sb.getGridData().rows; r++){
-			for(c = 0; c < sb.getGridData().cols; c++){
-				setTimeout(_updateCell.bind(null,r,c,1), (r*10+c)*10);
-			}
+		switch(state) {
+			case 'game-reset':
+				for(r = 0; r < sb.getGridData().rows; r++){
+					for(c = 0; c < sb.getGridData().cols; c++){
+						setTimeout(_updateCell.bind(null,r,c,0), (r*10+c)*10);
+					}
+				}
+				break;
+			case 'game-stop':
+				for(r = 0; r < sb.getGridData().rows; r++){
+					for(c = 0; c < sb.getGridData().cols; c++){
+						setTimeout(_updateCell.bind(null,r,c,1), (r*10+c)*10);
+					}
+				}
+				break;
 		}
 	};
 
@@ -62,15 +82,14 @@ TETRIS.registerModule('grid', function(sb){
 		for(r = 0; r < sb.getGridData().rows; r++){
 			row = [];
 			for(c = 0; c < sb.getGridData().cols; c++){
-				row.push(0);
+				row.push(1);
 			}
 			grid.push(row);
 		}
 		sb.setGridData('grid', grid);
 		sb.subscribeEvent('game-render', _drawGrid);
 		sb.subscribeEvent('sigil-fixed', _blockCells);
-		sb.subscribeEvent('game-intro', _onStart);
-		sb.subscribeEvent('game-over', _onOver);
+		sb.subscribeEvent('game-stateChange', _onGameStateChange);
 	};
 
 	var _destroy = function(){

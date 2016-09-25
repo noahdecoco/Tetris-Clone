@@ -158,6 +158,36 @@ var TETRIS = (function(){
 
 	var _onGameStateChange =  function(state){
 		console.log('State: ' , state);
+		switch(state) {
+			case 'game-reset':
+				// -> game-reset
+				// --- play grid intro animation
+				// --- set sigil to blank
+				// --- set score to 0
+				// --- set level to 0
+				// --- add key listeners
+				break;
+			case 'game-play':
+				// -> game-play
+				// --- create first sigil
+				// --- start the game-update event
+				// ---- check for key presses
+				// ---- check for cleared rows
+				// ---- update score, level
+				break;
+			case 'game-pause':
+				// -> game-pause
+				// --- stop the game-update event
+				// --- remove key listeners
+				break;
+			case 'game-stop':
+				// -> game-stop
+				// --- stop the game-update event
+				// --- play grid outro animation
+				// --- remove key listeners
+				break;
+
+		}
 	};
 
 	// Initialise
@@ -170,8 +200,8 @@ var TETRIS = (function(){
 			rows     : _canvas.height/c,
 			cols     : _canvas.width/c
 		};
-		_subscribeEvent('sigil-settled', _checkRows);
-		_subscribeEvent('game-stateChange', _onGameStateChange);
+		// _subscribeEvent('sigil-fixed', _checkRows);
+		// _subscribeEvent('game-stateChange', _onGameStateChange);
 	};
 
 	var _startGame = function(){

@@ -6,48 +6,6 @@ TETRIS.initModule('sigil');
 TETRIS.initModule('game-controller');
 TETRIS.initModule('game-keeper');
 
-/*var btnStart = document.getElementById('btn-start');
-btnStart.addEventListener("click", function(e){
-	e.currentTarget.classList.add("hidden");
-	TETRIS.startGame();
-});*/
-
-// GAME STATES
-// -> game-init
-// --- create canvas
-// --- create grid
-// --- start the game-render event
-// --- initialise all modules
-
-// -> game-reset
-// --- play grid intro animation
-// --- set sigil to blank
-// --- set score to 0
-// --- set level to 0
-// --- add key listeners
-
-// -> game-start
-// --- create first sigil
-// --- start the game-update event
-// ---- check for key presses
-// ---- check for cleared rows
-// ---- update score, level
-
-// -> game-pause
-// --- stop the game-update event
-// --- stop the game-render event
-// --- remove key listeners
-
-// -> game-play
-// --- start the game-update event
-// --- start the game-render event
-// --- add key listeners
-
-// -> game-over
-// --- play grid outro animation
-// --- stop the game-update event
-// --- remove key listeners
-
 
 // EVENTS
 // --> key-pressed : direction/rotation
@@ -70,3 +28,5 @@ btnStart.addEventListener("click", function(e){
 // --> game-render
 // --- draw the grid
 // --- draw the sigil
+
+// --> game-stateChange
