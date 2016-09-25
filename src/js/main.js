@@ -1,4 +1,4 @@
-TETRIS.initGame('game-canvas', 300, 600, 30);
+TETRIS.initGame('game-canvas', 250, 500, 25);
 
 TETRIS.initModule('game-loop');
 TETRIS.initModule('grid');
