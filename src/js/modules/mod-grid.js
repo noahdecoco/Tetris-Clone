@@ -67,7 +67,7 @@ TETRIS.registerModule('grid', function(sb){
 			grid.push(row);
 		}
 		sb.setGridData('grid', grid);
-		sb.subscribeEvent('render', _drawGrid);
+		sb.subscribeEvent('game-render', _drawGrid);
 		sb.subscribeEvent('sigil-fixed', _blockCells);
 		sb.subscribeEvent('game-intro', _onStart);
 		sb.subscribeEvent('game-over', _onOver);

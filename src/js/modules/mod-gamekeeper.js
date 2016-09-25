@@ -1,6 +1,6 @@
 TETRIS.registerModule('game-keeper', function(sb){
 
-	var _score = 0, _level = 1, _clearedRows = 0, _diffTreshhold = 5, _gamePaused = false;
+	var _score = 0, _level = 1, _clearedRows = 0, _diffTreshhold = 5;
 
 	var _updateGame = function(){
 		_score += 101;
@@ -15,16 +15,6 @@ TETRIS.registerModule('game-keeper', function(sb){
 
 	var _init = function(){
 		sb.subscribeEvent("row-cleared", _updateGame);
-		document.getElementById('btn-togglePlay').addEventListener('click', function(e){
-			_gamePaused = !_gamePaused;
-			if(_gamePaused) {
-				e.currentTarget.innerHTML = "PLAY";
-				sb.setGameState('IS_PAUSED');
-			} else {
-				e.currentTarget.innerHTML = "PAUSE";
-				sb.setGameState('IS_PLAYING');
-			}
-		});
 	};
 
 	var _destroy = function(){

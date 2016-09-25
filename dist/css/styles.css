@@ -47,14 +47,12 @@ a {
 #game-keeper {
   text-align: left;
 }
-#game-keeper .btn {
-  float: right;
-}
 .btn {
   transition: color 0.5s ease;
   cursor: pointer;
   padding: 4px;
   font-size: 14px;
+  display: inline-block;
 }
 .btn:hover {
   color: #fff;
@@ -62,15 +60,15 @@ a {
 #game-canvas {
   position: relative;
 }
-#btn-start {
-  position: absolute;
-  width: 118px;
-  height: 58px;
-  line-height: 58px;
-  background: #222;
-  left: 0;
-  right: 0;
-  top: 411px;
-  margin: auto;
-  cursor: pointer;
-}
+/*#btn-start {
+	position: absolute;
+	width: 118px;
+	height: 58px;
+	line-height: 58px;
+	background: #222;
+	left: 0;
+	right: 0;
+	top: 411px;
+	margin: auto;
+	cursor: pointer;
+}*/

@@ -201,6 +201,23 @@ TETRIS.registerModule('sigil', function(sb){
 		return true;
 	};
 
+	var _keyDownListener = function(e){
+		switch (e.keyCode) {
+			case 37:
+			_move('left');
+			break;
+			case 38:
+			_rotate();
+			break;
+			case 39:
+			_move('right');
+			break;
+			case 40:
+			_move('down');
+			break;
+		}
+	};
+
 	var _reset = function(){
 		_x = 3 * _cellSize;
 		_y = 0;
@@ -218,11 +235,12 @@ TETRIS.registerModule('sigil', function(sb){
 	
 	var _init = function(){
 		_cellSize = sb.getGridData().cellSize;
-		sb.subscribeEvent('move-sigil', _move);
-		sb.subscribeEvent('rotate-sigil', _rotate);
+
+		sb.addEventListener(window, 'keydown', _keyDownListener);
+
 		sb.subscribeEvent('sigil-settled', _reset);
-		sb.subscribeEvent('render', _draw);
-		sb.subscribeEvent('update', _update);	
+		sb.subscribeEvent('game-render', _draw);
+		// sb.subscribeEvent('game-update', _update);	
 		sb.subscribeEvent('level-up', _levelUp);
 		sb.subscribeEvent('game-start', _reset);
 	};

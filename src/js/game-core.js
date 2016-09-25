@@ -156,6 +156,10 @@ var TETRIS = (function(){
 		_gameState = state;
 	};
 
+	var _onGameStateChange =  function(state){
+		console.log('State: ' , state);
+	};
+
 	// Initialise
 	var _initGame = function(cvsId, w, h, c){
 		_createCanvas(cvsId, w, h);
@@ -167,6 +171,7 @@ var TETRIS = (function(){
 			cols     : _canvas.width/c
 		};
 		_subscribeEvent('sigil-settled', _checkRows);
+		_subscribeEvent('game-stateChange', _onGameStateChange);
 	};
 
 	var _startGame = function(){

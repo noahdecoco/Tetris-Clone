@@ -16,7 +16,7 @@ TETRIS.registerModule('game-loop', function(sb){
 				_delta = _currTime - _lastUpdateTime;
 				if(_delta > _ups) {
 					// UPDATE
-					sb.publishEvent('update');
+					sb.publishEvent('game-update');
 					_lastUpdateTime = _currTime;
 				}
 
@@ -24,7 +24,7 @@ TETRIS.registerModule('game-loop', function(sb){
 				if(_delta > _fps) {
 					// RENDER
 					sb.clearCanvas();
-					sb.publishEvent('render');
+					sb.publishEvent('game-render');
 					_lastRenderTime = _currTime;
 				}
 				break;
@@ -40,7 +40,7 @@ TETRIS.registerModule('game-loop', function(sb){
 				if(_delta > _fps) {
 					// RENDER
 					sb.clearCanvas();
-					sb.publishEvent('render');
+					sb.publishEvent('game-render');
 					_lastRenderTime = _currTime;
 				}
 				break;

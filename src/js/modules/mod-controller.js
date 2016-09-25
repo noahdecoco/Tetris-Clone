@@ -1,54 +1,57 @@
 TETRIS.registerModule('game-controller', function(sb){
 
-	var _gamePaused = false;
+	var btnPlay, btnRewind, btnStop;
+	var isPlaying = false;
+	var isPaused = false;
 
-	var _keyDownListener = function(e){
-		switch (e.keyCode) {
-			case 37:
-			sb.publishEvent('move-sigil', ['left']);
-			break;
-			case 38:
-			sb.publishEvent('rotate-sigil');
-			break;
-			case 39:
-			sb.publishEvent('move-sigil', ['right']);
-			break;
-			case 40:
-			sb.publishEvent('move-sigil', ['down']);
-			break;
-			case 32:
-			// sb.publishEvent('rotate-sigil');
-			// sb.publishEvent('slam');
-			break;
+	var _playGame =function(e){
+		if(!isPlaying){
+			sb.publishEvent('game-stateChange', ['game-reset']);
+			sb.publishEvent('game-stateChange', ['game-play']);
+			isPlaying = true;
+			btnPlay.innerHTML = "PAUSE";
+		} else {
+			if(isPaused) {
+				sb.publishEvent('game-stateChange', ['game-play']);
+				btnPlay.innerHTML = "PAUSE";
+			} else {
+				sb.publishEvent('game-stateChange', ['game-pause']);
+				btnPlay.innerHTML = "PLAY";
+			}
+			isPaused = !isPaused;
 		}
-		// sb.removeEventListener(window, 'keydown', _keyDownListener);
-		// sb.addEventListener(window, 'keyup', _keyUpListener);
 	};
 
-	var _keyUpListener = function(){
-		sb.addEventListener(window, 'keydown', _keyDownListener);
-		sb.removeEventListener(window, 'keyup', _keyUpListener);
+	var _rewindGame =function(e){
+		if(isPlaying){
+			sb.publishEvent('game-stateChange', ['game-rewind']);
+		}
 	};
 
-	var _addListeners = function(){
-		sb.addEventListener(window, 'keydown', _keyDownListener);
+	var _stopGame =function(e){
+		if(isPlaying){
+			isPlaying = false;
+			isPaused = false;
+			sb.publishEvent('game-stateChange', ['game-stop']);
+			btnPlay.innerHTML = "START";
+		}
 	};
 
-	var _removeListeners = function(){
-		sb.removeEventListener(window, 'keydown', _keyDownListener);
-	};
-	
 	var _init = function(){
-		sb.addEventListener(window, 'keydown', _keyDownListener);
-		sb.subscribeEvent('game-start', _addListeners);
-		sb.subscribeEvent('game-over', _removeListeners);
+		btnPlay = document.getElementById('btn-play');
+		sb.addEventListener(btnPlay, 'click', _playGame);
+
+		btnRewind = document.getElementById('btn-rewind');
+		sb.addEventListener(btnRewind, 'keydown', _rewindGame);
+		sb.addEventListener(btnRewind, 'keydown', _rewindGame);
+
+		btnStop = document.getElementById('btn-stop');
+		sb.addEventListener(btnStop, 'click', _stopGame);
 	};
 
 	var _destroy = function(){
-		sb.removeEventListener(window, 'keydown', _keyDownListener);
-		sb.removeEventListener(window, 'keyup', _keyUpListener);
-	};
 
+	};
 
 	return {
 		init: _init,
