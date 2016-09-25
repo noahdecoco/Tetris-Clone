@@ -13,6 +13,18 @@ TETRIS.registerModule('game-keeper', function(sb){
 		}
 	};
 
+	var _onGameStateChange =  function(state){
+		switch(state) {
+			case 'game-reset':
+				_score = 0;
+				_level = 1;
+				_clearedRows = 0;
+				document.getElementById('score').innerHTML = "Score: " + _score;
+				document.getElementById('level').innerHTML = "Level: " + _level;
+				break;
+		}
+	};
+
 	var _init = function(){
 		sb.subscribeEvent("row-cleared", _updateGame);
 	};

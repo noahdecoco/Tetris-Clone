@@ -89,8 +89,6 @@ var TETRIS = (function(){
 
 	// GRID
 	var _checkRows = function(){
-		console.log("checking rows");
-		if(_gameState === "IS_OVER") return;
 		var rowFull = true, r, c;
 		for(r = 0; r < _gridData.rows; r++){
 			// console.log(_gridData.grid[r]);

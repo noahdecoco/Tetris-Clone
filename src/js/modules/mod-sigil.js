@@ -241,19 +241,24 @@ TETRIS.registerModule('sigil', function(sb){
 		switch(state) {
 			case 'game-play':
 				_spawnSigil();
+				sb.addEventListener(window, 'keydown', _keyDownListener);
+				break;
+			case 'game-resume':
+				sb.addEventListener(window, 'keydown', _keyDownListener);
+				break;
+			case 'game-pause':
+				sb.removeEventListener(window, 'keydown', _keyDownListener);
 				break;
 			case 'game-stop':
 				_destroySigil();
+				sb.removeEventListener(window, 'keydown', _keyDownListener);
 				break;
 		}
 	};
 	
 	var _init = function(){
 		_cellSize = sb.getGridData().cellSize;
-
-		sb.addEventListener(window, 'keydown', _keyDownListener);
 		sb.subscribeEvent('game-stateChange', _onGameStateChange);
-
 		sb.subscribeEvent('game-render', _draw);
 		sb.subscribeEvent('game-update', _update);	
 		sb.subscribeEvent('level-up', _levelUp);

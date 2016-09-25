@@ -14,7 +14,6 @@ TETRIS.registerModule('grid', function(sb){
 	};
 
 	var _blockCells = function(sigil,x,y){
-		console.log("block");
 		for(var i = 0; i < sigil.length; i++) {
 			if(sigil[i] == 1){
 				var posX = x + (i%4)*sb.getGridData().cellSize;

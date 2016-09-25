@@ -25,22 +25,24 @@ TETRIS.registerModule('game-controller', function(sb){
 			setTimeout(function(){
 				sb.publishEvent('game-stateChange', ['game-play']);
 			}, 2500);
-			// isPlaying = true;
 		} else {
 			if(isPaused) {
-				sb.publishEvent('game-stateChange', ['game-play']);
+				sb.publishEvent('game-stateChange', ['game-resume']);
 			} else {
 				sb.publishEvent('game-stateChange', ['game-pause']);
 			}
-			// isPaused = !isPaused;
 		}
 	};
 
 	var _rewindGame =function(e){
 		if(isPlaying){
 			sb.publishEvent('game-stateChange', ['game-rewind']);
-			sb.addEventListener(btnRewind, 'mouseup', _playGame);
-			isPaused = !isPaused;
+		}
+	};
+
+	var _resumeGame =function(e){
+		if(isPlaying){
+			sb.publishEvent('game-stateChange', ['game-resume']);
 		}
 	};
 
@@ -51,21 +53,30 @@ TETRIS.registerModule('game-controller', function(sb){
 	};
 
 	var _onGameStateChange =  function(state){
-		console.log("State : " + state);
+		console.log("state",state);
 		switch(state) {
 			case 'game-reset':
 				isPlaying = false;
 				isPaused = false;
 				btnPlay.innerHTML = "START";
+				sb.removeEventListener(btnPlay, 'click', _playGame);
 				break;
 			case 'game-play':
 				isPlaying = true;
 				isPaused = false;
 				btnPlay.innerHTML = "PAUSE";
+				sb.addEventListener(btnPlay, 'click', _playGame);
 				break;
 			case 'game-pause':
 				isPaused = true;
 				btnPlay.innerHTML = "PLAY";
+				sb.addEventListener(btnPlay, 'click', _playGame);
+				break;
+			case 'game-resume':
+				isPaused = false;
+				isPlaying = true;
+				btnPlay.innerHTML = "PAUSE";
+				sb.addEventListener(btnPlay, 'click', _playGame);
 				break;
 			case 'game-stop':
 				isPlaying = false;
@@ -81,7 +92,7 @@ TETRIS.registerModule('game-controller', function(sb){
 
 		btnRewind = document.getElementById('btn-rewind');
 		sb.addEventListener(btnRewind, 'mousedown', _rewindGame);
-		sb.addEventListener(btnRewind, 'mouseup', _playGame);
+		sb.addEventListener(btnRewind, 'mouseup', _resumeGame);
 
 		btnStop = document.getElementById('btn-stop');
 		sb.addEventListener(btnStop, 'click', _stopGame);
