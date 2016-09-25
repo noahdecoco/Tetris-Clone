@@ -88,30 +88,6 @@ var TETRIS = (function(){
 	};
 
 	// GRID
-	var _checkRows = function(){
-		var rowFull = true, r, c;
-		for(r = 0; r < _gridData.rows; r++){
-			// console.log(_gridData.grid[r]);
-			rowFull = true;
-			for(c = 0; c < _gridData.cols; c++) {
-				if(_gridData.grid[r][c] === 0) {
-					// console.log("not full");
-					rowFull = false;
-					break;
-				}
-			}
-			if(rowFull) {
-				_gridData.grid.splice(r,1);
-				var tempRow = [];
-				for(c = 0; c < _gridData.cols; c++) {
-					tempRow.push(0);
-				}
-				_gridData.grid.unshift(tempRow);
-				_publishEvent('row-cleared');
-			}
-		}
-	};
-
 	var _checkCell = function(x,y){
 		if(y <= 0 || typeof _gridData.grid == 'undefined') return 0;
 		return _gridData.grid[y/_gridData.cellSize][x/_gridData.cellSize];
@@ -196,7 +172,6 @@ var TETRIS = (function(){
 		clearCanvas         : _clearCanvas,
 		drawRect            : _drawRect,
 		// GRID
-		checkRows           : _checkRows,
 		checkCell           : _checkCell,
 		getGridData         : _getGridData,
 		setGridData         : _setGridData,

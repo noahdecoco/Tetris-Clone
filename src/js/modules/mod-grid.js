@@ -27,7 +27,7 @@ TETRIS.registerModule('grid', function(sb){
 
 	var _checkRows = function(){
 		console.log("checking rows");
-		var rowFull = true, r, c;
+		var rowFull = true, numRows = 0, r, c;
 		for(r = 0; r < sb.getGridData().rows; r++){
 			// console.log(sb.getGridData().grid[r]);
 			rowFull = true;
@@ -39,15 +39,16 @@ TETRIS.registerModule('grid', function(sb){
 				}
 			}
 			if(rowFull) {
+				numRows++;
 				sb.getGridData().grid.splice(r,1);
 				var tempRow = [];
 				for(c = 0; c < sb.getGridData().cols; c++) {
 					tempRow.push(0);
 				}
 				sb.getGridData().grid.unshift(tempRow);
-				sb.publishEvent('row-cleared');
 			}
 		}
+		if(numRows !== 0) sb.publishEvent('row-cleared', [numRows]);
 	};
 
 	var _updateCell = function(r,c,val){
