@@ -56,7 +56,6 @@ TETRIS.registerModule('grid', function(sb){
 	};
 
 	var _onGameStateChange =  function(state){
-		console.log('State: ' , state);
 		var r, c;
 		switch(state) {
 			case 'game-reset':

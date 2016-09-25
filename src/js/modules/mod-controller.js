@@ -1,10 +1,8 @@
 TETRIS.registerModule('game-controller', function(sb){
 
 	var btnPlay, btnRewind, btnStop;
-	var isStarted = false;
 	var isPlaying = false;
 	var isPaused = false;
-	var isRewind = false;
 
 	var _changeGameState = function(state){
 		switch(state) {
@@ -27,20 +25,15 @@ TETRIS.registerModule('game-controller', function(sb){
 			setTimeout(function(){
 				sb.publishEvent('game-stateChange', ['game-play']);
 			}, 2500);
-			isPlaying = true;
-			btnPlay.innerHTML = "PAUSE";
+			// isPlaying = true;
 		} else {
 			if(isPaused) {
 				sb.publishEvent('game-stateChange', ['game-play']);
-				btnPlay.innerHTML = "PAUSE";
 			} else {
 				sb.publishEvent('game-stateChange', ['game-pause']);
-				btnPlay.innerHTML = "PLAY";
 			}
-			isPaused = !isPaused;
-			isRewind = false;
+			// isPaused = !isPaused;
 		}
-		isStarted = true;
 	};
 
 	var _rewindGame =function(e){
@@ -48,18 +41,38 @@ TETRIS.registerModule('game-controller', function(sb){
 			sb.publishEvent('game-stateChange', ['game-rewind']);
 			sb.addEventListener(btnRewind, 'mouseup', _playGame);
 			isPaused = !isPaused;
-			isRewind = true;
 		}
 	};
 
 	var _stopGame =function(e){
 		if(isPlaying){
-			isPlaying = false;
-			isPaused = false;
 			sb.publishEvent('game-stateChange', ['game-stop']);
-			btnPlay.innerHTML = "START";
 		}
-		isStarted = false;
+	};
+
+	var _onGameStateChange =  function(state){
+		console.log("State : " + state);
+		switch(state) {
+			case 'game-reset':
+				isPlaying = false;
+				isPaused = false;
+				btnPlay.innerHTML = "START";
+				break;
+			case 'game-play':
+				isPlaying = true;
+				isPaused = false;
+				btnPlay.innerHTML = "PAUSE";
+				break;
+			case 'game-pause':
+				isPaused = true;
+				btnPlay.innerHTML = "PLAY";
+				break;
+			case 'game-stop':
+				isPlaying = false;
+				isPaused = false;
+				btnPlay.innerHTML = "START";
+				break;
+		}
 	};
 
 	var _init = function(){
@@ -72,6 +85,8 @@ TETRIS.registerModule('game-controller', function(sb){
 
 		btnStop = document.getElementById('btn-stop');
 		sb.addEventListener(btnStop, 'click', _stopGame);
+
+		sb.subscribeEvent('game-stateChange', _onGameStateChange);
 	};
 
 	var _destroy = function(){
