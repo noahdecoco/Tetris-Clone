@@ -35,7 +35,10 @@ module.exports = function(grunt){
 
 		uglify: {
 			options: {
-				banner: _banner
+				banner: _banner,
+				mangle: false,
+				compress: false,
+				beautify: true
 			},
 			build: {
 				files: {

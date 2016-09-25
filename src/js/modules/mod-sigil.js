@@ -1,13 +1,19 @@
 TETRIS.registerModule('sigil', function(sb){
 
 	var _types = [
-		[ // FATSO
+		/*[ // FATSO
 			[0],[0],[0],[0],
 			[0],[0],[0],[0],
 			[1],[1],[1],[1],
 			[1],[1],[1],[1]
-		]
-		/*[ // L
+		]*/
+		[ // *
+			[0],[0],[0],[0],
+			[2],[2],[2],[0],
+			[2],[3],[2],[0],
+			[2],[2],[2],[0]
+		],
+		[ // L
 			[0],[1],[0],[0],
 			[0],[1],[0],[0],
 			[0],[1],[1],[0],
@@ -48,23 +54,25 @@ TETRIS.registerModule('sigil', function(sb){
 			[0],[1],[1],[0],
 			[0],[0],[1],[0],
 			[0],[0],[0],[0]
-		]*/
+		]
 	];
 
 	var _cellSize, _x, _y;
 	var _speed = 2;
 	var _tempY = 0;
 	var _row = 4;
-
-	var _currSigil, _nextSigil = _types[Math.floor(Math.random()*_types.length)];
+	var _bomb = false;
+	var _currSigil;
+	var _numSigils = 0;
 
 	var _draw = function() {
 		if(!_currSigil) return;
 		for(var i = 0; i < _currSigil.length; i++){
 			var x = _x + (Math.floor(i%_row) * _cellSize);
 			var y = _y + (Math.floor(i/_row) * _cellSize);
-			if(_currSigil[i][0] === 1) {
-				sb.drawRect(x,y,_cellSize,_cellSize,'#52bbae');
+			if(_currSigil[i][0] === 1 || _currSigil[i][0] === 3) {
+				if(_bomb) sb.drawRect(x,y,_cellSize,_cellSize,'#bf4040');
+				else sb.drawRect(x,y,_cellSize,_cellSize,'#52bbae');
 			} else {
 				// sb.drawRect(x,y,_cellSize,_cellSize,'#eee');
 			}
@@ -100,6 +108,7 @@ TETRIS.registerModule('sigil', function(sb){
 	};
 
 	var _rotate = function() {
+		if(_bomb) return;
 		var tempSigil = [];
 		var i = 0;
 		tempSigil.length = _currSigil.length;
@@ -187,7 +196,7 @@ TETRIS.registerModule('sigil', function(sb){
 		for (i = 0; i < sigil.length; i++){
 			var x = _x + (Math.floor(i%_row) * _cellSize) + xOffset;
 			var y = _y + (Math.floor(i/_row) * _cellSize) + yOffset;
-			if(sigil[i] == 1){
+			if(sigil[i] == 1 || sigil[i] == 3){
 				if(x < 0 || x >= sb.getGridData().width) { 
 					return false;
 				}
@@ -222,14 +231,20 @@ TETRIS.registerModule('sigil', function(sb){
 	var _spawnSigil = function(){
 		_x = 3 * _cellSize;
 		_y = 0;
-		_currSigil = _nextSigil;
-		_nextSigil = _types[Math.floor(Math.random()*_types.length)];
+		if(Math.random() < 0.08 && _numSigils !== 0) {
+			_bomb = true;
+			_currSigil = _types[0];
+		} else {
+			_bomb = false;
+			var rand = Math.floor(Math.random()*(_types.length-1))+1;
+			_currSigil = _types[rand];
+		}
 		for(var i = 0; i < Math.floor(Math.random()*3); i++) _rotate();
 		if(_isCellEmpty(_currSigil, 0, -_cellSize)) _y -= _cellSize;
 		if(!_hasSpaceToBe(_currSigil)) {
-			console.log("DEAD!!!");
 			sb.publishEvent('game-stateChange', ['game-stop']);
 		}
+		_numSigils++;
 	};
 
 	var _destroySigil = function(){

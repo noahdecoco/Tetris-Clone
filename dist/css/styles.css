@@ -23,6 +23,15 @@ h1 {
   margin: 20px auto 0;
   color: #52bbae;
 }
+.green {
+  color: #52bbae;
+}
+.red {
+  color: #bf4040;
+}
+.grey {
+  color: #444;
+}
 p {
   color: #ccc;
 }

@@ -6,7 +6,6 @@ TETRIS.initModule('sigil');
 TETRIS.initModule('game-controller');
 TETRIS.initModule('game-keeper');
 
-
 // EVENTS
 // --> key-pressed : direction/rotation
 // --- move sigil

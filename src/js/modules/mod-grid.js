@@ -1,5 +1,7 @@
 TETRIS.registerModule('grid', function(sb){
 
+	var _grid = [];
+
 	var _drawGrid = function(){
 		var r,c;
 		for(r = 0; r < sb.getGridData().rows; r++){
@@ -15,18 +17,26 @@ TETRIS.registerModule('grid', function(sb){
 
 	var _blockCells = function(sigil,x,y){
 		for(var i = 0; i < sigil.length; i++) {
-			if(sigil[i] == 1){
-				var posX = x + (i%4)*sb.getGridData().cellSize;
-				var posY = y + Math.floor(i/4)*sb.getGridData().cellSize;
-				if(posY >= 0) sb.getGridData().grid[posY/sb.getGridData().cellSize][posX/sb.getGridData().cellSize] = 1;
+			var posX = x + (i%4)*sb.getGridData().cellSize;
+			var posY = y + Math.floor(i/4)*sb.getGridData().cellSize;
+			if(posY >= 0) {
+				switch(sigil[i][0]){
+					case 1:
+						_grid[posY/sb.getGridData().cellSize][posX/sb.getGridData().cellSize] = 1;
+						break;
+					case 2:
+						if (typeof _grid[posY/sb.getGridData().cellSize] != 'undefined' && typeof _grid[posY/sb.getGridData().cellSize][posX/sb.getGridData().cellSize] != 'undefined'){
+							_grid[posY/sb.getGridData().cellSize][posX/sb.getGridData().cellSize] = 0;
+						}
+						break;
+				}
 			}
 		}
-		sb.setGridData("grid", sb.getGridData().grid);
+		sb.setGridData("grid", _grid);
 		_checkRows();
 	};
 
 	var _checkRows = function(){
-		console.log("checking rows");
 		var rowFull = true, numRows = 0, r, c;
 		for(r = 0; r < sb.getGridData().rows; r++){
 			// console.log(sb.getGridData().grid[r]);
@@ -52,7 +62,9 @@ TETRIS.registerModule('grid', function(sb){
 	};
 
 	var _updateCell = function(r,c,val){
-		sb.getGridData().grid[r][c] = val;
+		// sb.getGridData().grid[r][c] = val;
+		_grid[r][c] = val;
+		sb.setGridData('grid', _grid);
 	};
 
 	var _onGameStateChange =  function(state){
@@ -76,16 +88,15 @@ TETRIS.registerModule('grid', function(sb){
 	};
 
 	var _init = function(){
-
-		var grid = [], r, c, row;
+		var r, c, row;
 		for(r = 0; r < sb.getGridData().rows; r++){
 			row = [];
 			for(c = 0; c < sb.getGridData().cols; c++){
 				row.push(1);
 			}
-			grid.push(row);
+			_grid.push(row);
 		}
-		sb.setGridData('grid', grid);
+		sb.setGridData('grid', _grid);
 		sb.subscribeEvent('game-render', _drawGrid);
 		sb.subscribeEvent('sigil-fixed', _blockCells);
 		sb.subscribeEvent('game-stateChange', _onGameStateChange);
