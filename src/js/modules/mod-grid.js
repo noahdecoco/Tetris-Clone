@@ -1,6 +1,9 @@
 TETRIS.registerModule('grid', function(sb){
 
 	var _grid = [];
+	var _grenadeDrop, _sigilFix;
+	var _gameSoundStart, _gameSoundOver;
+// audio.play();
 
 	var _drawGrid = function(){
 		var r,c;
@@ -23,10 +26,12 @@ TETRIS.registerModule('grid', function(sb){
 				switch(sigil[i][0]){
 					case 1:
 						_grid[posY/sb.getGridData().cellSize][posX/sb.getGridData().cellSize] = 1;
+						_sigilFix.play();
 						break;
 					case 2:
 						if (typeof _grid[posY/sb.getGridData().cellSize] != 'undefined' && typeof _grid[posY/sb.getGridData().cellSize][posX/sb.getGridData().cellSize] != 'undefined'){
 							_grid[posY/sb.getGridData().cellSize][posX/sb.getGridData().cellSize] = 0;
+							_grenadeDrop.play();
 						}
 						break;
 				}
@@ -76,6 +81,8 @@ TETRIS.registerModule('grid', function(sb){
 						setTimeout(_updateCell.bind(null,r,c,0), (r*10+c)*10);
 					}
 				}
+				_gameSoundStart.currentTime = 0;
+				_gameSoundStart.play();
 				break;
 			case 'game-stop':
 				for(r = 0; r < sb.getGridData().rows; r++){
@@ -83,6 +90,8 @@ TETRIS.registerModule('grid', function(sb){
 						setTimeout(_updateCell.bind(null,r,c,1), (r*10+c)*10);
 					}
 				}
+				_gameSoundOver.currentTime = 0;
+				_gameSoundOver.play();
 				break;
 		}
 	};
@@ -100,6 +109,11 @@ TETRIS.registerModule('grid', function(sb){
 		sb.subscribeEvent('game-render', _drawGrid);
 		sb.subscribeEvent('sigil-fixed', _blockCells);
 		sb.subscribeEvent('game-stateChange', _onGameStateChange);
+
+		_grenadeDrop = new Audio('audio/grenade.mp3');
+		_sigilFix = new Audio('audio/sigil-fix.mp3');
+		_gameSoundStart = new Audio('audio/game-start.mp3');
+		_gameSoundOver = new Audio('audio/game-over.mp3');
 	};
 
 	var _destroy = function(){
