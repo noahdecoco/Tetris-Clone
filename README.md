@@ -3,7 +3,6 @@ I built this to practice programming Design Patterns in a game. The objective, w
 
 ## Features
 Game Loop ✓ 
-
 Render Engine ✓ 
 
 Sigil control ✓ 
