@@ -3,16 +3,27 @@ I built this to practice programming Design Patterns in a game. The objective, w
 
 ## Features
 Game Loop ✓ 
+
 Render Engine ✓ 
+
 Sigil control ✓ 
+
 Grid modification ✓ 
+
 Game States ✓ 
+
 Game Scenes ✓ 
+
 Intro/Outro Animation ✓ 
+
 Scoring system ✓ 
+
 Score Multipliers ✓ 
+
 Difficulty Levels ✓ 
+
 Grenades ✓ 
+
 Sound Effects ✓
 
 ## Design Patterns in there
