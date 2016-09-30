@@ -3,7 +3,21 @@ TETRIS.registerModule('game-keeper', function(sb){
 	var _score = 0, _level = 1, _clearedRows = 0, _diffTreshhold = 5;
 
 	var _updateGame = function(numRows){
-		_score += 101 * numRows + ((numRows-1)*101);
+		switch (numRows) {
+			case 1:
+				_score += 40 * _level; 
+				// 100 * numRows + ((numRows-1)*100*17);
+				break;
+			case 2:
+				_score += 100 * _level; 
+				break;
+			case 3:
+				_score += 300 * _level; 
+				break;
+			case 4:
+				_score += 1200 * _level; 
+				break;
+		}
 		console.log(_score, numRows);
 		document.getElementById('score').innerHTML = "Score: " + _score;
 		_clearedRows ++;
