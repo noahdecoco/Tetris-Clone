@@ -90,9 +90,9 @@ TETRIS.registerModule('game-controller', function(sb){
 		btnPlay = document.getElementById('btn-play');
 		sb.addEventListener(btnPlay, 'click', _playGame);
 
-		btnRewind = document.getElementById('btn-rewind');
+		/*btnRewind = document.getElementById('btn-rewind');
 		sb.addEventListener(btnRewind, 'mousedown', _rewindGame);
-		sb.addEventListener(btnRewind, 'mouseup', _resumeGame);
+		sb.addEventListener(btnRewind, 'mouseup', _resumeGame);*/
 
 		btnStop = document.getElementById('btn-stop');
 		sb.addEventListener(btnStop, 'click', _stopGame);

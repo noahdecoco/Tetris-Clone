@@ -1,5 +1,7 @@
 TETRIS.registerModule('sigil', function(sb){
 
+	var _sigilRotateSound, _sigilMoveSound;
+
 	var _types = [
 		/*[ // FATSO
 			[0],[0],[0],[0],
@@ -91,10 +93,18 @@ TETRIS.registerModule('sigil', function(sb){
 		if(!_currSigil) return;
 		switch(dir) {
 			case 'right':
-				if(_isCellEmpty(_currSigil, _cellSize, 0)) _x += _cellSize;
+				if(_isCellEmpty(_currSigil, _cellSize, 0)) {	
+					_x += _cellSize;
+					_sigilMoveSound.currentTime = 0;
+					_sigilMoveSound.play();
+				}
 				break;
 			case 'left':
-				if(_isCellEmpty(_currSigil, -_cellSize, 0)) _x -= _cellSize;
+				if(_isCellEmpty(_currSigil, -_cellSize, 0)) {
+					_x -= _cellSize;
+					_sigilMoveSound.currentTime = 0;
+					_sigilMoveSound.play();
+				}
 				break;
 			case 'down':
 				if(_isCellEmpty(_currSigil, 0, _cellSize)) {
@@ -123,6 +133,8 @@ TETRIS.registerModule('sigil', function(sb){
 
 		if(_hasSpaceToBe(tempSigil)) {
 			_currSigil = tempSigil;
+			_sigilRotateSound.currentTime = 0;
+			_sigilRotateSound.play();
 		}
 		// Reposition if out of bounds
 	};
@@ -239,7 +251,7 @@ TETRIS.registerModule('sigil', function(sb){
 			var rand = Math.floor(Math.random()*(_types.length-1))+1;
 			_currSigil = _types[rand];
 		}
-		for(var i = 0; i < Math.floor(Math.random()*3); i++) _rotate();
+		// for(var i = 0; i < Math.floor(Math.random()*3); i++) _rotate();
 		if(_isCellEmpty(_currSigil, 0, -_cellSize)) _y -= _cellSize;
 		if(!_hasSpaceToBe(_currSigil)) {
 			sb.publishEvent('game-stateChange', ['game-stop']);
@@ -283,6 +295,8 @@ TETRIS.registerModule('sigil', function(sb){
 		sb.subscribeEvent('game-render', _draw);
 		sb.subscribeEvent('game-update', _update);	
 		sb.subscribeEvent('level-up', _levelUp);
+		_sigilMoveSound = new Audio('audio/sigil-move.mp3');
+		_sigilRotateSound = new Audio('audio/sigil-rotate.mp3');
 	};
 
 	var _destroy = function(){
