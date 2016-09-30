@@ -1,43 +1,46 @@
+// Fonts
 @import 'https://fonts.googleapis.com/css?family=Roboto';
 
+// Helpers
 .hidden {
 	opacity: 0;
 	display: none;
 }
 
-body {
-	width: 100%;
-	position: relative;
-	color: #ccc;
-	margin: 0;
-	padding: 0;
-	text-align: center;
-	background: #222;
-	font-family: 'Roboto', sans-serif;
+// Layout
+.row {
+	max-width: 780px;
+	margin: auto;
+	overflow: auto;
 }
 
-canvas {
-	margin: 10px auto 20px;
-	display: inline-block;
-	box-shadow: 0 0 2px 2px #ddd;
-	background: #fff;
+.col-left {
+	float: left;
+	width: 50%;
+}
+
+.col-right {
+	float: right;
+	width: 50%;
+}
+
+// Colors
+.green { color: #52bbae; }
+.red   { color: #bf4040; }
+.grey  { color: #999; }
+
+
+// Typography
+body {
+	color: #ccc;
+	text-align: center;
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
 }
 
 h1 {
 	margin: 20px auto 0;
 	color: #52bbae;
-}
-
-.green {
-	color: #52bbae;
-}
-
-.red {
-	color: #bf4040;
-}
-
-.grey {
-	color: #444;
 }
 
 p {
@@ -48,29 +51,31 @@ a {
 	color: #52bbae;	
 }
 
-.row {
-	max-width: 780px;
-	margin: auto;
-	overflow: auto;
+// General
+body {
+	width: 100%;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	background: #222;
 }
 
-.col-left {
-	float: left;
-	padding-top: 20px;
+
+// Game
+.game-controller {
+	margin-top: 22px;
 }
 
-.col-right {
-	float: right;
+canvas {
+	margin: 10px auto 16px;
+	display: inline-block;
+	box-shadow: 0 0 2px 2px #ddd;
+	background: #fff;
 }
 
 #score, #level {
-	font-size: 22px;
+	font-size: 20px;
 }
-
-#game-keeper {
-	text-align: left;
-}
-
 
 .btn {
 	transition: color 0.5s ease;
@@ -86,20 +91,3 @@ a {
 .btn:hover {
 	color: #fff;
 }
-
-#game-canvas {
-	position: relative;
-}
-
-/*#btn-start {
-	position: absolute;
-	width: 118px;
-	height: 58px;
-	line-height: 58px;
-	background: #222;
-	left: 0;
-	right: 0;
-	top: 411px;
-	margin: auto;
-	cursor: pointer;
-}*/

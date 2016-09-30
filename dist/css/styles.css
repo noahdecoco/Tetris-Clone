@@ -3,25 +3,18 @@
   opacity: 0;
   display: none;
 }
-body {
-  width: 100%;
-  position: relative;
-  color: #ccc;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  background: #222;
-  font-family: 'Roboto', sans-serif;
+.row {
+  max-width: 780px;
+  margin: auto;
+  overflow: auto;
 }
-canvas {
-  margin: 10px auto 20px;
-  display: inline-block;
-  box-shadow: 0 0 2px 2px #ddd;
-  background: #fff;
+.col-left {
+  float: left;
+  width: 50%;
 }
-h1 {
-  margin: 20px auto 0;
-  color: #52bbae;
+.col-right {
+  float: right;
+  width: 50%;
 }
 .green {
   color: #52bbae;
@@ -30,7 +23,17 @@ h1 {
   color: #bf4040;
 }
 .grey {
-  color: #444;
+  color: #999;
+}
+body {
+  color: #ccc;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+}
+h1 {
+  margin: 20px auto 0;
+  color: #52bbae;
 }
 p {
   color: #ccc;
@@ -38,24 +41,25 @@ p {
 a {
   color: #52bbae;
 }
-.row {
-  max-width: 780px;
-  margin: auto;
-  overflow: auto;
+body {
+  width: 100%;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  background: #222;
 }
-.col-left {
-  float: left;
-  padding-top: 20px;
+.game-controller {
+  margin-top: 22px;
 }
-.col-right {
-  float: right;
+canvas {
+  margin: 10px auto 16px;
+  display: inline-block;
+  box-shadow: 0 0 2px 2px #ddd;
+  background: #fff;
 }
 #score,
 #level {
-  font-size: 22px;
-}
-#game-keeper {
-  text-align: left;
+  font-size: 20px;
 }
 .btn {
   transition: color 0.5s ease;
@@ -70,18 +74,3 @@ a {
 .btn:hover {
   color: #fff;
 }
-#game-canvas {
-  position: relative;
-}
-/*#btn-start {
-	position: absolute;
-	width: 118px;
-	height: 58px;
-	line-height: 58px;
-	background: #222;
-	left: 0;
-	right: 0;
-	top: 411px;
-	margin: auto;
-	cursor: pointer;
-}*/
