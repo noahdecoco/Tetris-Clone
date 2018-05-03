@@ -45,16 +45,16 @@ TETRIS.registerModule('sigil', function(sb){
 			[0],[1],[0],[0],
 			[0],[1],[0],[0]
 		],
-		[ // S
-			[0],[0],[1],[0],
+		[ // Z
+			[0],[0],[0],[0],
 			[0],[1],[1],[0],
-			[0],[1],[0],[0],
+			[0],[0],[1],[1],
 			[0],[0],[0],[0]
 		],
-		[ // Z
-			[0],[1],[0],[0],
+		[ // S
+			[0],[0],[0],[0],
+			[0],[0],[1],[1],
 			[0],[1],[1],[0],
-			[0],[0],[1],[0],
 			[0],[0],[0],[0]
 		]
 	];
@@ -93,7 +93,7 @@ TETRIS.registerModule('sigil', function(sb){
 		if(!_currSigil) return;
 		switch(dir) {
 			case 'right':
-				if(_isCellEmpty(_currSigil, _cellSize, 0)) {	
+				if(_isCellEmpty(_currSigil, _cellSize, 0)) {
 					_x += _cellSize;
 					_sigilMoveSound.currentTime = 0;
 					_sigilMoveSound.play();
@@ -150,7 +150,7 @@ TETRIS.registerModule('sigil', function(sb){
 
 				x = _x + (Math.floor(i%_row) * _cellSize);
 				y = _y + (Math.floor(i/_row) * _cellSize);
-				
+
 				// If rotating makes it go off the left side of canvas,
 				// check if it can be shifted to the right
 				// If possible, shift and rotate
@@ -209,7 +209,7 @@ TETRIS.registerModule('sigil', function(sb){
 			var x = _x + (Math.floor(i%_row) * _cellSize) + xOffset;
 			var y = _y + (Math.floor(i/_row) * _cellSize) + yOffset;
 			if(sigil[i] == 1 || sigil[i] == 3){
-				if(x < 0 || x >= sb.getGridData().width) { 
+				if(x < 0 || x >= sb.getGridData().width) {
 					return false;
 				}
 				if(y >= sb.getGridData().height) {
@@ -288,19 +288,19 @@ TETRIS.registerModule('sigil', function(sb){
 				break;
 		}
 	};
-	
+
 	var _init = function(){
 		_cellSize = sb.getGridData().cellSize;
 		sb.subscribeEvent('game-stateChange', _onGameStateChange);
 		sb.subscribeEvent('game-render', _draw);
-		sb.subscribeEvent('game-update', _update);	
+		sb.subscribeEvent('game-update', _update);
 		sb.subscribeEvent('level-up', _levelUp);
 		_sigilMoveSound = new Audio('audio/sigil-move.mp3');
 		_sigilRotateSound = new Audio('audio/sigil-rotate.mp3');
 	};
 
 	var _destroy = function(){
-		
+
 	};
 
 	return {
